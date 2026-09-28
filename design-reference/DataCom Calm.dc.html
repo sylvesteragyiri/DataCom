@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f8;--c1:#ffffff;--c2:#e7ebf5;--c3:#f7f9fd;--tx:#111528;--t2:#767d94;--ol:#e3e7f1;--pr:#2f5bea;--onpr:#ffffff;--prc:#e6ecfe;--onprc:#1f3fae;--ok:#12805c;--okc:#e7f6f0;--wn:#a5620a;--wnc:#fdf3e4;--cr:#d13b41;--crc:#fdeff0;--scrim:rgba(17,21,40,.34);--code:#111528;--card:0 1px 2px rgba(23,32,61,.05),0 8px 20px -12px rgba(23,32,61,.18);--lift:0 10px 30px -10px rgba(23,32,61,.24)}
+body{margin:0;background:#dfe4ef;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--pr)}a:hover{color:var(--onprc)}
+@keyframes dcspin{to{transform:rotate(360deg)}}
+@keyframes dcup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes dcfade{from{opacity:0}to{opacity:1}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:18px;padding:36px 20px 56px;box-sizing:border-box">
+
+<div style="display:flex;align-items:center;gap:14px;font-size:12px;color:#767d94">
+<span style="font-weight:700;letter-spacing:-.01em">DataCom — Calm</span>
+<button type="button" onClick="{{ toggleTheme }}" style="border:1px solid #dbe1ee;background:#fff;color:#111528;border-radius:12px;padding:7px 13px;font:500 12px 'Instrument Sans',system-ui,sans-serif;cursor:pointer" style-hover="background:#f4f4f5">{{ themeLabel }}</button>
+</div>
+
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" dark="{{ dark }}" width="{{ devW }}" height="{{ devH }}" hint-size="428px,908px">
+<div style="{{ themeVars }}">
+<div style="height:100%;position:relative;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);color:var(--tx)">
+
+<div style="display:flex;align-items:center;gap:4px;padding:14px 12px 12px 6px;background:var(--bg);flex:none">
+<sc-if value="{{ canBack }}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{ back }}" style="width:48px;height:48px;border:0;background:transparent;color:var(--tx);font-size:22px;cursor:pointer;border-radius:100px;display:flex;align-items:center;justify-content:center" style-hover="background:var(--c2)">←</button>
+</sc-if>
+<sc-if value="{{ isRoot }}" hint-placeholder-val="{{ false }}">
+<div style="width:12px"></div>
+</sc-if>
+<div style="flex:1;min-width:0">
+<div style="font-size:25px;line-height:30px;font-weight:700;letter-spacing:-.035em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ title }}</div>
+<sc-if value="{{ subtitle }}" hint-placeholder-val="{{ true }}">
+<div style="font-size:11.5px;line-height:16px;color:var(--t2);margin-top:3px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">{{ subtitle }}</div>
+</sc-if>
+</div>
+<button type="button" onClick="{{ refresh }}" style="width:44px;height:44px;border:0;background:transparent;color:var(--t2);font-size:17px;cursor:pointer;border-radius:100px;display:flex;align-items:center;justify-content:center" style-hover="background:var(--c2)">{{ refreshGlyph }}</button>
+<button type="button" onClick="{{ openInbox }}" aria-label="Notifications" style="width:44px;height:44px;border:0;background:transparent;color:var(--tx);cursor:pointer;border-radius:100px;display:flex;align-items:center;justify-content:center;position:relative" style-hover="background:var(--c2)">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.5a6 6 0 1 0-12 0c0 6-2 7-2 7h16s-2-1-2-7M13.7 20a2 2 0 0 1-3.4 0"></path></svg>
+<sc-if value="{{ inboxCount }}" hint-placeholder-val="{{ true }}">
+<span style="position:absolute;top:9px;right:9px;width:15px;height:15px;padding:0;border-radius:100px;background:var(--cr);color:#fff;font:600 9px 'Instrument Sans',system-ui,sans-serif;line-height:1;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bg);box-sizing:border-box">{{ inboxCount }}</span>
+</sc-if>
+</button>
+</div>
+
+<div style="flex:1;overflow:auto;padding:2px 18px 24px">
+
+<sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px;animation:dcfade .18s ease">
+
+<div style="background:var(--crc);color:var(--tx);border:1px solid var(--cr);border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="width:10px;height:10px;border-radius:50%;background:var(--cr)"></div>
+<div style="font-size:20px;font-weight:500;letter-spacing:-.2px">2 services critical</div>
+</div>
+<div style="font-size:14px;line-height:20px;opacity:.85">orders-primary is at 96% of its connection pool. storefront-web is throwing a TypeError at 248×/min.</div>
+<button type="button" onClick="{{ openAlerts }}" style="align-self:flex-start;margin-top:2px;border:0;background:var(--cr);color:#fff;border-radius:12px;padding:11px 20px;font:500 14px 'Instrument Sans',system-ui,-apple-system,sans-serif;cursor:pointer;min-height:44px" style-hover="filter:brightness(1.1)">Triage 4 alerts</button>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px">
+<sc-for list="{{ healthCounts }}" as="h" hint-placeholder-count="4">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:3px">
+<div style="font-size:22px;font-weight:500;color:{{ h.color }}">{{ h.n }}</div>
+<div style="font-size:11px;color:var(--t2);text-align:center;line-height:14px">{{ h.label }}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:baseline;justify-content:space-between">
+<div style="font-size:14px;font-weight:500">Average latency</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px;color:var(--t2)">last 30 min</div>
+</div>
+<div style="position:relative;height:96px;margin:0 -2px">
+<svg viewBox="0 0 300 96" preserveAspectRatio="none" style="width:100%;height:96px;display:block;overflow:visible">
+<defs><linearGradient id="dcfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--pr)" stop-opacity=".22"></stop><stop offset="100%" stop-color="var(--pr)" stop-opacity="0"></stop></linearGradient></defs>
+<line x1="0" y1="26" x2="300" y2="26" stroke="var(--ol)" stroke-width="1" stroke-dasharray="3 5"></line>
+<line x1="0" y1="62" x2="300" y2="62" stroke="var(--ol)" stroke-width="1" stroke-dasharray="3 5"></line>
+<path d="{{ chartArea }}" fill="url(#dcfill)"></path>
+<path d="{{ chartLine }}" fill="none" stroke="var(--pr)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+<circle cx="{{ chartX }}" cy="{{ chartY }}" r="4" fill="var(--c1)" stroke="var(--pr)" stroke-width="2.5" vector-effect="non-scaling-stroke"></circle>
+</svg>
+<div style="position:absolute;top:-4px;right:0;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--cr)">peak 1.42 s</div>
+</div>
+<div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:10px;color:var(--t2);margin-top:-8px">
+<span>14:00</span><span>14:15</span><span>14:30</span>
+</div>
+<div style="display:flex;gap:18px">
+<div><div style="font-size:20px;font-weight:500">184<span style="font-size:13px;color:var(--t2)"> ms</span></div><div style="font-size:11px;color:var(--t2)">p50</div></div>
+<div><div style="font-size:20px;font-weight:500">912<span style="font-size:13px;color:var(--t2)"> ms</span></div><div style="font-size:11px;color:var(--t2)">p95</div></div>
+<div><div style="font-size:20px;font-weight:500">1.2<span style="font-size:13px;color:var(--t2)">k rps</span></div><div style="font-size:11px;color:var(--t2)">throughput</div></div>
+</div>
+</div>
+
+<div style="display:flex;align-items:baseline;justify-content:space-between;padding:14px 4px 2px">
+<div style="font-size:14px;font-weight:600;letter-spacing:.1px">Live metrics</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">nightwatch + sentry</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<sc-for list="{{ monitorMetrics }}" as="m" hint-placeholder-count="4">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:13px 14px">
+<div style="font-size:11px;color:var(--t2)">{{ m.k }}</div>
+<div style="font-size:19px;font-weight:600;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;margin-top:3px;color:{{ m.color }}">{{ m.v }}</div>
+<div style="font-size:11px;color:var(--t2);margin-top:2px">{{ m.sub }}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="font-size:14px;font-weight:600;padding:14px 4px 4px">Activity</div>
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:18px;padding:6px 16px 12px">
+<sc-for list="{{ activity }}" as="e" hint-placeholder-count="5">
+<div style="display:flex;gap:14px;padding:10px 0">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2);width:44px;flex:none;padding-top:2px">{{ e.t }}</div>
+<div style="flex:none;display:flex;flex-direction:column;align-items:center;width:8px">
+<div style="width:8px;height:8px;border-radius:50%;background:{{ e.color }};margin-top:4px"></div>
+<div style="flex:1;width:1px;background:var(--ol);margin-top:4px"></div>
+</div>
+<div style="flex:1;min-width:0;font-size:13px;line-height:18px;color:var(--tx)">{{ e.text }}<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ e.src }}</div></div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isInbox }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;animation:dcfade .18s ease">
+<div style="display:flex;gap:4px;background:var(--c2);border:1px solid var(--ol);border-radius:12px;padding:3px">
+<sc-for list="{{ inboxTabs }}" as="t" hint-placeholder-count="2">
+<button type="button" onClick="{{ t.pick }}" style="flex:1;border:0;border-radius:10px;background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.sh }};padding:9px 6px;font:600 12.5px 'Instrument Sans',system-ui,sans-serif;cursor:pointer">{{ t.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ inboxAlerts }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;color:var(--t2);padding:6px 4px 0">Infrastructure signals that crossed a threshold.</div>
+<sc-for list="{{ topAlerts }}" as="a" hint-placeholder-count="3">
+<button type="button" onClick="{{ a.open }}" style="text-align:left;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif" style-hover="background:var(--c2)">
+<div style="width:8px;height:8px;border-radius:50%;margin-top:6px;flex:none;background:{{ a.color }}"></div>
+<div style="flex:1;min-width:0">
+<div style="font-size:15px;font-weight:600;color:var(--tx)">{{ a.title }}</div>
+<div style="font-size:13px;line-height:18px;color:var(--t2);margin-top:2px">{{ a.detail }}</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2);margin-top:6px">{{ a.source }} · {{ a.ago }}</div>
+</div>
+</button>
+</sc-for>
+<button type="button" onClick="{{ openAlerts }}" style="align-self:flex-start;border:0;background:transparent;color:var(--pr);font:600 13px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;padding:10px 4px">All alerts →</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ inboxIssues }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;color:var(--t2);padding:6px 4px 0">Application exceptions reported by Sentry.</div>
+<sc-for list="{{ issues }}" as="i" hint-placeholder-count="3">
+<button type="button" onClick="{{ i.open }}" style="text-align:left;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:16px;padding:13px 15px;display:flex;flex-direction:column;gap:5px;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif" style-hover="background:var(--c2)">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font:600 10px 'Instrument Sans',system-ui,-apple-system,sans-serif;letter-spacing:.4px;background:{{ i.chipBg }};color:{{ i.color }};border-radius:5px;padding:3px 7px">{{ i.level }}</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ i.events }} events · {{ i.users }} users</div>
+</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px;color:var(--tx)">{{ i.type }}</div>
+<div style="font-size:12.5px;line-height:17px;color:var(--t2)">{{ i.msg }}</div>
+</button>
+</sc-for>
+</div>
+</sc-if>
+<div style="height:24px"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAlerts }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;animation:dcfade .18s ease">
+<div style="display:flex;gap:8px;padding:2px 0 6px;overflow:auto">
+<sc-for list="{{ alertFilters }}" as="f" hint-placeholder-count="4">
+<button type="button" onClick="{{ f.pick }}" style="flex:none;border:1px solid {{ f.border }};background:{{ f.bg }};color:{{ f.fg }};border-radius:12px;padding:9px 16px;font:500 13px 'Instrument Sans',system-ui,-apple-system,sans-serif;cursor:pointer;min-height:40px">{{ f.label }}</button>
+</sc-for>
+</div>
+<sc-for list="{{ alerts }}" as="a" hint-placeholder-count="4">
+<button type="button" onClick="{{ a.open }}" style="text-align:left;border:0;border-left:4px solid {{ a.color }};background:var(--c1);border-radius:2px 16px 16px 2px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif" style-hover="background:var(--c2)">
+<div style="display:flex;align-items:center;gap:8px">
+<span style="font:500 11px 'Instrument Sans',system-ui,-apple-system,sans-serif;letter-spacing:.5px;background:{{ a.chipBg }};color:{{ a.color }};border-radius:9px;padding:3px 8px">{{ a.level }}</span>
+<span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ a.ago }}</span>
+</div>
+<div style="font-size:16px;font-weight:500;color:var(--tx);margin-top:2px">{{ a.title }}</div>
+<div style="font-size:13px;line-height:18px;color:var(--t2)">{{ a.detail }}</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2);margin-top:4px">{{ a.source }}</div>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAlert }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;animation:dcfade .18s ease">
+<div style="background:{{ alert.chipBg }};border-radius:18px;padding:16px 18px">
+<div style="font:500 11px 'Instrument Sans',system-ui,-apple-system,sans-serif;letter-spacing:.5px;color:{{ alert.color }}">{{ alert.level }} · {{ alert.ago }}</div>
+<div style="font-size:20px;font-weight:500;color:var(--tx);margin-top:6px;line-height:26px">{{ alert.title }}</div>
+<div style="font-size:14px;line-height:20px;color:var(--t2);margin-top:6px">{{ alert.detail }}</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<sc-for list="{{ alert.metrics }}" as="m" hint-placeholder-count="4">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:12px 14px">
+<div style="font-size:11px;color:var(--t2)">{{ m.k }}</div>
+<div style="font-size:18px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;margin-top:3px">{{ m.v }}</div>
+</div>
+</sc-for>
+</div>
+<div style="font-size:14px;font-weight:500;padding:6px 4px 0">{{ alert.traceLabel }}</div>
+<div style="background:var(--code);border:1px solid var(--ol);border-radius:16px;padding:12px 0;overflow:auto">
+<sc-for list="{{ alert.trace }}" as="l" hint-placeholder-count="8">
+<div style="display:flex;gap:10px;padding:2px 14px;white-space:pre;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11.5px;line-height:18px">
+<span style="color:#52525b;flex:none;width:22px;text-align:right">{{ l.n }}</span>
+<span style="color:{{ l.color }}">{{ l.t }}</span>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;gap:8px;padding-top:4px">
+<button type="button" onClick="{{ alert.go }}" style="flex:1;border:0;background:var(--pr);color:var(--onpr);border-radius:12px;padding:14px;font:500 14px 'Instrument Sans',system-ui,-apple-system,sans-serif;cursor:pointer;min-height:48px" style-hover="filter:brightness(1.1)">{{ alert.cta }}</button>
+<button type="button" onClick="{{ ack }}" style="flex:none;border:1px solid var(--ol);background:transparent;color:var(--pr);border-radius:12px;padding:14px 20px;font:500 14px 'Instrument Sans',system-ui,-apple-system,sans-serif;cursor:pointer;min-height:48px" style-hover="background:var(--c2)">{{ ackLabel }}</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isInfra }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px;animation:dcfade .18s ease">
+<div style="display:flex;align-items:center;gap:9px;background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:12px;padding:0 12px;height:44px;margin-bottom:4px">
+<span style="color:var(--t2);font-size:16px">⌕</span>
+<input placeholder="Search connections" style="flex:1;border:0;background:transparent;outline:none;font:400 14px 'Instrument Sans',system-ui,sans-serif;color:var(--tx)">
+</div>
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:6px;padding-bottom:8px">
+<div style="display:flex;align-items:baseline;justify-content:space-between;padding:10px 4px 2px">
+<div style="font-size:14px;font-weight:500">{{ g.name }}</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ g.meta }}</div>
+</div>
+<sc-for list="{{ g.items }}" as="s" hint-placeholder-count="3">
+<div style="display:flex;align-items:stretch;gap:2px">
+<button type="button" onClick="{{ s.open }}" style="flex:1;min-width:0;text-align:left;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:13px;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif" style-hover="background:var(--c2)">
+<div style="width:38px;height:38px;border-radius:12px;flex:none;background:{{ s.chipBg }};color:{{ s.color }};display:flex;align-items:center;justify-content:center;font:500 12px 'IBM Plex Mono',ui-monospace,monospace">{{ s.abbr }}</div>
+<div style="flex:1;min-width:0">
+<div style="font-size:15px;font-weight:500;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.name }}</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.host }}</div>
+</div>
+<div style="flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+<div style="width:8px;height:8px;border-radius:50%;background:{{ s.color }}"></div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ s.latency }}</div>
+</div>
+</button>
+<button type="button" onClick="{{ s.menu }}" style="flex:none;width:36px;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:16px;color:var(--t2);font-size:18px;cursor:pointer" style-hover="background:var(--c2)">⋮</button>
+</div>
+</sc-for>
+</div>
+</sc-for>
+
+<div style="display:flex;align-items:baseline;justify-content:space-between;padding:14px 4px 2px">
+<div style="font-size:14px;font-weight:600">Cloud &amp; platforms</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">3 accounts</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ cloudCards }}" as="c" hint-placeholder-count="3">
+<button type="button" onClick="{{ c.open }}" style="text-align:left;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:16px;padding:14px 15px;display:flex;flex-direction:column;gap:11px;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif" style-hover="background:var(--c2)">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:38px;height:38px;border-radius:12px;background:{{ c.chipBg }};color:{{ c.color }};display:flex;align-items:center;justify-content:center;font:500 12px 'IBM Plex Mono',ui-monospace,monospace;flex:none">{{ c.abbr }}</div>
+<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600;color:var(--tx)">{{ c.name }}</div><div style="font-size:12px;color:var(--t2)">{{ c.sub }}</div></div>
+<div style="width:8px;height:8px;border-radius:50%;background:{{ c.color }}"></div>
+</div>
+<div style="display:flex;gap:18px">
+<sc-for list="{{ c.stats }}" as="s" hint-placeholder-count="3">
+<div><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:15px;color:var(--tx)">{{ s.v }}</div><div style="font-size:10px;color:var(--t2);margin-top:1px">{{ s.k }}</div></div>
+</sc-for>
+</div>
+</button>
+</sc-for>
+</div>
+<div style="height:56px"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAddType }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px;animation:dcfade .18s ease">
+<div style="font-size:14px;line-height:20px;color:var(--t2);padding:2px 4px">Credentials are stored on this device only. Nothing is sent anywhere but your infrastructure.</div>
+<sc-for list="{{ typeGroups }}" as="tg" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:14px;font-weight:500;padding:0 4px">{{ tg.name }}</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<sc-for list="{{ tg.items }}" as="t" hint-placeholder-count="4">
+<button type="button" onClick="{{ t.pick }}" style="border:1px solid {{ t.border }};background:{{ t.bg }};border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif;min-height:76px" style-hover="background:var(--c2)">
+<div style="width:30px;height:30px;border-radius:10px;background:{{ t.chipBg }};color:{{ t.color }};display:flex;align-items:center;justify-content:center;font:500 11px 'IBM Plex Mono',ui-monospace,monospace">{{ t.abbr }}</div>
+<div style="font-size:14px;font-weight:500;color:var(--tx);text-align:left">{{ t.name }}</div>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAddForm }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;animation:dcfade .18s ease">
+<sc-for list="{{ formFields }}" as="f" hint-placeholder-count="5">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:12.5px;font-weight:500;color:var(--tx)">{{ f.label }}</div>
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:12px;padding:0 12px;height:40px;display:flex;align-items:center;font-size:14px;color:var(--tx);font-family:{{ f.font }}">{{ f.value }}</div>
+</div>
+</sc-for>
+<div style="display:flex;align-items:center;justify-content:space-between;background:var(--c1);border-radius:16px;padding:14px 16px;margin-top:6px">
+<div><div style="font-size:15px">Use TLS</div><div style="font-size:12px;color:var(--t2)">Require encrypted connection</div></div>
+<button type="button" onClick="{{ toggleTls }}" style="width:44px;height:24px;border-radius:100px;border:1px solid {{ tls.border }};background:{{ tls.bg }};position:relative;cursor:pointer;flex:none">
+<div style="position:absolute;top:2px;left:{{ tls.left }};width:18px;height:18px;border-radius:50%;background:{{ tls.knob }};box-shadow:0 1px 2px rgba(9,9,11,.2);transition:left .16s"></div>
+</button>
+</div>
+<div style="display:flex;gap:8px;padding-top:8px">
+<button type="button" onClick="{{ testConn }}" style="flex:1;border:1px solid var(--ol);background:transparent;color:var(--pr);border-radius:12px;padding:14px;font:500 14px 'Instrument Sans',system-ui,-apple-system,sans-serif;cursor:pointer;min-height:48px" style-hover="background:var(--c2)">{{ testLabel }}</button>
+<button type="button" onClick="{{ saveConn }}" style="flex:1;border:0;background:var(--pr);color:var(--onpr);border-radius:12px;padding:14px;font:500 14px 'Instrument Sans',system-ui,-apple-system,sans-serif;cursor:pointer;min-height:48px" style-hover="filter:brightness(1.1)">Save</button>
+</div>
+<sc-if value="{{ testResult }}" hint-placeholder-val="{{ false }}">
+<div style="background:var(--okc);color:var(--tx);border:1px solid var(--ok);border-radius:12px;padding:12px 14px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;line-height:18px">{{ testResult }}</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDb }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;animation:dcfade .18s ease">
+<div style="display:flex;gap:4px;background:var(--c2);border:1px solid var(--ol);border-radius:12px;padding:3px;position:sticky;top:0;z-index:2">
+<sc-for list="{{ dbTabs }}" as="t" hint-placeholder-count="4">
+<button type="button" onClick="{{ t.pick }}" style="flex:1;border:0;background:{{ t.bg }};color:{{ t.fg }};border-radius:9px;padding:9px 4px;font:500 13px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;min-height:38px;box-shadow:{{ t.sh }}">{{ t.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ dbOverview }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="background:var(--crc);color:var(--tx);border:1px solid var(--cr);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:15px;font-weight:500">Connection pool near limit</div>
+<div style="display:flex;align-items:center;gap:10px">
+<div style="flex:1;height:8px;border-radius:100px;background:rgba(0,0,0,.12);overflow:hidden"><div style="width:96%;height:100%;background:var(--cr)"></div></div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500">192/200</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<sc-for list="{{ dbMetrics }}" as="m" hint-placeholder-count="6">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:13px 14px">
+<div style="font-size:11px;color:var(--t2)">{{ m.k }}</div>
+<div style="font-size:19px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;margin-top:3px;color:{{ m.color }}">{{ m.v }}</div>
+<div style="font-size:11px;color:var(--t2);margin-top:2px">{{ m.sub }}</div>
+</div>
+</sc-for>
+</div>
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+<div style="font-size:14px;font-weight:500">Running queries</div>
+<sc-for list="{{ running }}" as="q" hint-placeholder-count="3">
+<div style="display:flex;gap:12px;align-items:flex-start;border-top:1px solid var(--ol);padding-top:10px">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;color:{{ q.color }};flex:none;width:52px">{{ q.dur }}</div>
+<div style="flex:1;min-width:0;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;line-height:17px;color:var(--t2);word-break:break-word">{{ q.sql }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ dbQueries }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;color:var(--t2);padding:0 4px">Slow query log · threshold 500 ms · last 24 h</div>
+<sc-for list="{{ slowQueries }}" as="q" hint-placeholder-count="4">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;overflow:hidden">
+<button type="button" onClick="{{ q.toggle }}" style="width:100%;text-align:left;border:0;background:transparent;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif">
+<div style="flex:1;min-width:0">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;line-height:17px;color:var(--tx);word-break:break-word">{{ q.sql }}</div>
+<div style="display:flex;gap:12px;margin-top:8px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)"><span style="color:{{ q.color }};font-weight:500">{{ q.mean }}</span><span>{{ q.calls }} calls</span><span>{{ q.share }}</span></div>
+</div>
+<span style="color:var(--t2);font-size:12px;flex:none;padding-top:2px">{{ q.caret }}</span>
+</button>
+<sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+<div style="border-top:1px solid var(--ol);padding:12px 16px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;font-weight:500;color:var(--t2)">EXPLAIN ANALYZE</div>
+<sc-for list="{{ q.plan }}" as="p" hint-placeholder-count="4">
+<div style="display:flex;gap:8px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11.5px;line-height:17px">
+<span style="color:{{ p.color }};white-space:pre">{{ p.t }}</span>
+</div>
+</sc-for>
+<div style="background:var(--wnc);color:var(--tx);border:1px solid var(--ol);border-radius:12px;padding:10px 12px;font-size:12px;line-height:17px;margin-top:4px">{{ q.hint }}</div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ dbSchema }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;color:var(--t2)">schema: public · 6 tables</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;color:var(--t2)">3.4 GB</div>
+</div>
+<sc-for list="{{ tables }}" as="t" hint-placeholder-count="6">
+<button type="button" onClick="{{ t.open }}" style="text-align:left;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:16px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif" style-hover="background:var(--c2)">
+<div style="flex:1;min-width:0">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:14px;color:var(--tx)">{{ t.name }}</div>
+<div style="font-size:11px;color:var(--t2);margin-top:3px">{{ t.rows }} rows · {{ t.cols }} columns · {{ t.idx }} indexes</div>
+</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;color:var(--t2);flex:none">{{ t.size }}</div>
+<span style="color:var(--t2);flex:none">›</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ dbSql }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="background:var(--code);border:1px solid var(--ol);border-radius:16px;padding:14px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12.5px;line-height:19px;white-space:pre-wrap;color:#e4e4e7">{{ sqlText }}<span style="display:inline-block;width:7px;height:15px;background:#a1a1aa;vertical-align:-2px;animation:dcfade .9s steps(2,end) infinite alternate"></span></div>
+<div style="display:flex;gap:8px;overflow:auto;padding-bottom:2px">
+<sc-for list="{{ sqlSnippets }}" as="s" hint-placeholder-count="4">
+<button type="button" onClick="{{ s.pick }}" style="flex:none;border:1px solid var(--ol);background:transparent;color:var(--tx);border-radius:12px;padding:8px 12px;font:400 12px 'IBM Plex Mono',ui-monospace,monospace;cursor:pointer;min-height:40px" style-hover="background:var(--c2)">{{ s.label }}</button>
+</sc-for>
+</div>
+<div style="display:flex;gap:8px;align-items:center">
+<button type="button" onClick="{{ runSql }}" style="flex:1;border:0;background:var(--pr);color:var(--onpr);border-radius:12px;padding:14px;font:500 14px 'Instrument Sans',system-ui,-apple-system,sans-serif;cursor:pointer;min-height:48px" style-hover="filter:brightness(1.1)">{{ runLabel }}</button>
+<button type="button" onClick="{{ openHistory }}" style="flex:none;border:1px solid var(--ol);background:transparent;color:var(--pr);border-radius:12px;padding:14px 18px;font:500 14px 'Instrument Sans',system-ui,-apple-system,sans-serif;cursor:pointer;min-height:48px" style-hover="background:var(--c2)">History</button>
+</div>
+<sc-if value="{{ sqlDone }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 4px 0">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;color:var(--ok)">3 rows · 218 ms</div>
+<div style="display:flex;gap:3px;background:var(--c2);border:1px solid var(--ol);border-radius:12px;padding:3px">
+<sc-for list="{{ rowViews }}" as="v" hint-placeholder-count="2">
+<button type="button" onClick="{{ v.pick }}" style="border:0;background:{{ v.bg }};color:{{ v.fg }};border-radius:9px;padding:6px 13px;font:500 12px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;min-height:34px;box-shadow:{{ v.sh }}">{{ v.label }}</button>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{ cardsView }}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{ resultRows }}" as="r" hint-placeholder-count="3">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:7px">
+<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--ol);padding-bottom:7px">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500">{{ r.head }}</div>
+<div style="font:500 11px 'Instrument Sans',system-ui,-apple-system,sans-serif;background:{{ r.chipBg }};color:{{ r.color }};border-radius:9px;padding:3px 8px">{{ r.status }}</div>
+</div>
+<sc-for list="{{ r.fields }}" as="f" hint-placeholder-count="4">
+<div style="display:flex;gap:12px;align-items:baseline">
+<div style="width:104px;flex:none;font-size:11px;color:var(--t2);font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">{{ f.k }}</div>
+<div style="flex:1;min-width:0;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--tx);word-break:break-word">{{ f.v }}</div>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</sc-if>
+<sc-if value="{{ tableView }}" hint-placeholder-val="{{ false }}">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;overflow:auto">
+<div style="display:flex;gap:0;min-width:520px;border-bottom:1px solid var(--ol)">
+<sc-for list="{{ resultCols }}" as="c" hint-placeholder-count="5">
+<div style="width:130px;flex:none;padding:10px 12px;font:500 11px 'IBM Plex Mono',ui-monospace,monospace;color:var(--t2)">{{ c }}</div>
+</sc-for>
+</div>
+<sc-for list="{{ resultRows }}" as="r" hint-placeholder-count="3">
+<div style="display:flex;min-width:520px;border-bottom:1px solid var(--ol)">
+<sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5">
+<div style="width:130px;flex:none;padding:10px 12px;font:400 12px 'IBM Plex Mono',ui-monospace,monospace;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c }}</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isTable }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;animation:dcfade .18s ease">
+<div style="display:flex;gap:4px;background:var(--c2);border:1px solid var(--ol);border-radius:12px;padding:3px">
+<sc-for list="{{ tableTabs }}" as="t" hint-placeholder-count="3">
+<button type="button" onClick="{{ t.pick }}" style="flex:1;border:0;background:{{ t.bg }};color:{{ t.fg }};border-radius:9px;padding:9px 4px;font:500 13px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;min-height:38px;box-shadow:{{ t.sh }}">{{ t.label }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ tabColumns }}" hint-placeholder-val="{{ true }}">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:4px 16px">
+<sc-for list="{{ columns }}" as="c" hint-placeholder-count="6">
+<div style="display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--ol)">
+<div style="flex:1;min-width:0"><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px">{{ c.name }}</div><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2);margin-top:2px">{{ c.type }}</div></div>
+<sc-if value="{{ c.badge }}" hint-placeholder-val="{{ true }}">
+<div style="flex:none;font:500 10px 'Instrument Sans',system-ui,-apple-system,sans-serif;letter-spacing:.4px;background:var(--prc);color:var(--onprc);border-radius:5px;padding:3px 7px">{{ c.badge }}</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ tabIndexes }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ indexes }}" as="i" hint-placeholder-count="3">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:13px 16px;display:flex;flex-direction:column;gap:4px">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px">{{ i.name }}</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ i.def }}</div>
+<div style="display:flex;gap:10px;margin-top:4px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:{{ i.color }}">{{ i.stat }}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ tabRows }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2);padding:0 4px">1,248,913 rows · showing 3 · ordered by created_at desc</div>
+<sc-for list="{{ tableRows }}" as="r" hint-placeholder-count="3">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:7px">
+<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--ol);padding-bottom:7px">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500">{{ r.head }}</div>
+<div style="font:500 11px 'Instrument Sans',system-ui,-apple-system,sans-serif;background:{{ r.chipBg }};color:{{ r.color }};border-radius:9px;padding:3px 8px">{{ r.status }}</div>
+</div>
+<sc-for list="{{ r.fields }}" as="f" hint-placeholder-count="4">
+<div style="display:flex;gap:12px;align-items:baseline">
+<div style="width:104px;flex:none;font-size:11px;color:var(--t2);font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">{{ f.k }}</div>
+<div style="flex:1;min-width:0;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12.5px;word-break:break-word">{{ f.v }}</div>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isRedis }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;animation:dcfade .18s ease">
+<div style="display:flex;gap:4px;background:var(--c2);border:1px solid var(--ol);border-radius:12px;padding:3px">
+<sc-for list="{{ redisTabs }}" as="t" hint-placeholder-count="3">
+<button type="button" onClick="{{ t.pick }}" style="flex:1;border:0;background:{{ t.bg }};color:{{ t.fg }};border-radius:9px;padding:9px 4px;font:500 13px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;min-height:38px;box-shadow:{{ t.sh }}">{{ t.label }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ redisOverview }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="background:var(--wnc);color:var(--tx);border:1px solid var(--wn);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:9px">
+<div style="display:flex;align-items:baseline;justify-content:space-between"><div style="font-size:15px;font-weight:500">Memory 88% of maxmemory</div><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px">3.52 / 4.00 GB</div></div>
+<div style="height:8px;border-radius:100px;background:rgba(0,0,0,.12);overflow:hidden"><div style="width:88%;height:100%;background:var(--wn)"></div></div>
+<div style="font-size:12px;line-height:17px">Eviction policy allkeys-lru · 1,204 keys evicted in the last hour.</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<sc-for list="{{ redisMetrics }}" as="m" hint-placeholder-count="6">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:13px 14px">
+<div style="font-size:11px;color:var(--t2)">{{ m.k }}</div>
+<div style="font-size:19px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;margin-top:3px;color:{{ m.color }}">{{ m.v }}</div>
+<div style="font-size:11px;color:var(--t2);margin-top:2px">{{ m.sub }}</div>
+</div>
+</sc-for>
+</div>
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:14px;font-weight:500">Replication</div>
+<sc-for list="{{ replicas }}" as="r" hint-placeholder-count="2">
+<div style="display:flex;align-items:center;gap:10px;border-top:1px solid var(--ol);padding-top:8px">
+<div style="width:8px;height:8px;border-radius:50%;background:{{ r.color }};flex:none"></div>
+<div style="flex:1;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px">{{ r.name }}</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ r.lag }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ redisKeys }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:9px;background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:12px;padding:0 12px;height:44px">
+<span style="color:var(--t2)">⌕</span>
+<div style="flex:1;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:14px;color:var(--tx)">session:*</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">SCAN</div>
+</div>
+<sc-for list="{{ keys }}" as="k" hint-placeholder-count="5">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+<div style="flex:1;min-width:0"><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ k.key }}</div><div style="font-size:11px;color:var(--t2);margin-top:3px">{{ k.type }} · {{ k.size }}</div></div>
+<div style="flex:none;text-align:right"><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;color:{{ k.color }}">{{ k.ttl }}</div><div style="font-size:10px;color:var(--t2)">TTL</div></div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ redisSlow }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;color:var(--t2);padding:0 4px">SLOWLOG · 128 entries retained</div>
+<sc-for list="{{ slowlog }}" as="s" hint-placeholder-count="4">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:13px 15px;display:flex;flex-direction:column;gap:5px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px;color:{{ s.color }};font-weight:500">{{ s.dur }}</div><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ s.ago }}</div></div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;line-height:17px;color:var(--t2);word-break:break-all">{{ s.cmd }}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isStorage }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;animation:dcfade .18s ease">
+<div style="background:var(--c2);color:var(--tx);border:1px solid var(--ol);border-radius:18px;padding:16px 18px;display:flex;gap:20px">
+<div><div style="font-size:24px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">1.9<span style="font-size:14px"> TB</span></div><div style="font-size:11px;opacity:.8">stored</div></div>
+<div><div style="font-size:24px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">3.4<span style="font-size:14px"> M</span></div><div style="font-size:11px;opacity:.8">objects</div></div>
+<div><div style="font-size:24px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">41<span style="font-size:14px"> ms</span></div><div style="font-size:11px;opacity:.8">p50 GET</div></div>
+</div>
+<sc-for list="{{ buckets }}" as="b" hint-placeholder-count="4">
+<button type="button" onClick="{{ b.open }}" style="text-align:left;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:13px;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif" style-hover="background:var(--c2)">
+<div style="width:38px;height:38px;border-radius:12px;flex:none;background:{{ b.chipBg }};color:{{ b.color }};display:flex;align-items:center;justify-content:center;font:500 11px 'IBM Plex Mono',ui-monospace,monospace">{{ b.abbr }}</div>
+<div style="flex:1;min-width:0">
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:14px;color:var(--tx)">{{ b.name }}</div>
+<div style="font-size:11px;color:var(--t2);margin-top:3px">{{ b.provider }} · {{ b.region }}</div>
+</div>
+<div style="flex:none;text-align:right"><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px">{{ b.size }}</div><div style="font-size:11px;color:var(--t2)">{{ b.objects }}</div></div>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isBucket }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px;animation:dcfade .18s ease">
+<div style="display:flex;gap:6px;align-items:center;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;color:var(--t2);padding:2px 4px 6px">assets-prod / <span style="color:var(--tx)">uploads/2026-08/</span></div>
+<sc-for list="{{ objects }}" as="o" hint-placeholder-count="6">
+<button type="button" onClick="{{ o.open }}" style="text-align:left;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif" style-hover="background:var(--c2)">
+<div style="width:34px;height:34px;border-radius:10px;flex:none;background:var(--c3);color:var(--t2);display:flex;align-items:center;justify-content:center;font:500 10px 'IBM Plex Mono',ui-monospace,monospace">{{ o.ext }}</div>
+<div style="flex:1;min-width:0"><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ o.name }}</div><div style="font-size:11px;color:var(--t2);margin-top:2px">{{ o.modified }}</div></div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;color:var(--t2);flex:none">{{ o.size }}</div>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCloud }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;animation:dcfade .18s ease">
+<sc-for list="{{ cloudCards }}" as="c" hint-placeholder-count="3">
+<button type="button" onClick="{{ c.open }}" style="text-align:left;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif" style-hover="background:var(--c2)">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:36px;height:36px;border-radius:16px;background:{{ c.chipBg }};color:{{ c.color }};display:flex;align-items:center;justify-content:center;font:500 11px 'IBM Plex Mono',ui-monospace,monospace;flex:none">{{ c.abbr }}</div>
+<div style="flex:1"><div style="font-size:16px;font-weight:500;color:var(--tx)">{{ c.name }}</div><div style="font-size:12px;color:var(--t2)">{{ c.sub }}</div></div>
+<div style="width:9px;height:9px;border-radius:50%;background:{{ c.color }}"></div>
+</div>
+<div style="display:flex;gap:16px">
+<sc-for list="{{ c.stats }}" as="s" hint-placeholder-count="3">
+<div><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:16px;color:var(--tx)">{{ s.v }}</div><div style="font-size:10px;color:var(--t2)">{{ s.k }}</div></div>
+</sc-for>
+</div>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCf }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;animation:dcfade .18s ease;padding-top:4px">
+<div style="display:flex;gap:3px;background:var(--c2);border:1px solid var(--ol);border-radius:12px;padding:3px">
+<sc-for list="{{ cfTabs }}" as="t" hint-placeholder-count="4">
+<button type="button" onClick="{{ t.pick }}" style="flex:1;border:0;background:{{ t.bg }};color:{{ t.fg }};border-radius:9px;padding:9px 4px;font:500 13px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;min-height:38px;box-shadow:{{ t.sh }}">{{ t.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ cfOverview }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<sc-for list="{{ cfMetrics }}" as="m" hint-placeholder-count="6">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:13px 14px">
+<div style="font-size:11px;color:var(--t2)">{{ m.k }}</div>
+<div style="font-size:19px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;margin-top:3px;color:{{ m.color }}">{{ m.v }}</div>
+<div style="font-size:11px;color:var(--t2);margin-top:2px">{{ m.sub }}</div>
+</div>
+</sc-for>
+</div>
+<div style="font-size:13px;font-weight:600;padding:8px 4px 0">Zones</div>
+<sc-for list="{{ zones }}" as="z" hint-placeholder-count="4">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+<div style="width:8px;height:8px;border-radius:50%;background:{{ z.color }};flex:none"></div>
+<div style="flex:1;min-width:0"><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px">{{ z.name }}</div><div style="font-size:11px;color:var(--t2);margin-top:2px">{{ z.plan }} · {{ z.records }} records · SSL {{ z.ssl }}</div></div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;color:var(--t2);flex:none">{{ z.requests }}</div>
+</div>
+</sc-for>
+<div style="font-size:13px;font-weight:600;padding:8px 4px 0">DNS · acme.io</div>
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:2px 14px">
+<sc-for list="{{ dns }}" as="d" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid {{ d.divider }}">
+<div style="flex:none;width:44px;font:500 10.5px 'IBM Plex Mono',ui-monospace,monospace;color:var(--t2);border:1px solid var(--ol);border-radius:5px;padding:3px 0;text-align:center">{{ d.type }}</div>
+<div style="flex:1;min-width:0"><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.name }}</div><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.value }}</div></div>
+<div style="flex:none;font-size:11px;color:{{ d.proxyColor }}">{{ d.proxy }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ cfWorkers }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;color:var(--t2);padding:0 4px">12 workers · 4.2 M requests in the last hour</div>
+<sc-for list="{{ workers }}" as="w" hint-placeholder-count="5">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:13px 15px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:9px">
+<div style="width:8px;height:8px;border-radius:50%;background:{{ w.color }};flex:none"></div>
+<div style="flex:1;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px">{{ w.name }}</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ w.deployed }}</div>
+</div>
+<div style="display:flex;gap:16px">
+<sc-for list="{{ w.stats }}" as="s" hint-placeholder-count="3">
+<div><div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:14px;color:{{ s.color }}">{{ s.v }}</div><div style="font-size:10px;color:var(--t2)">{{ s.k }}</div></div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+<div style="font-size:13px;font-weight:600;padding:10px 4px 2px">Worker logs · api-router</div>
+<div style="background:var(--code);border:1px solid var(--ol);border-radius:16px;padding:12px 0;overflow:auto">
+<sc-for list="{{ workerLog }}" as="l" hint-placeholder-count="8">
+<div style="display:flex;gap:10px;padding:1px 14px;white-space:pre;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11.5px;line-height:18px">
+<span style="color:#52525b;flex:none">{{ l.t }}</span><span style="color:{{ l.color }}">{{ l.m }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ cfSecurity }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="background:var(--c2);border:1px solid var(--ol);border-radius:16px;padding:13px 15px;display:flex;gap:20px">
+<div><div style="font-size:20px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">12.4k</div><div style="font-size:11px;color:var(--t2)">blocked / 24h</div></div>
+<div><div style="font-size:20px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">0.4%</div><div style="font-size:11px;color:var(--t2)">of requests</div></div>
+<div><div style="font-size:20px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">8</div><div style="font-size:11px;color:var(--t2)">active rules</div></div>
+</div>
+<sc-for list="{{ securityEvents }}" as="e" hint-placeholder-count="5">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font:500 10.5px 'Instrument Sans',system-ui,sans-serif;letter-spacing:.03em;background:{{ e.chipBg }};border:1px solid {{ e.color }};color:{{ e.color }};border-radius:5px;padding:3px 7px">{{ e.action }}</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ e.count }} · {{ e.ago }}</div>
+</div>
+<div style="font-size:13px;color:var(--tx)">{{ e.rule }}</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--t2);word-break:break-all">{{ e.detail }}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isVercel }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;animation:dcfade .18s ease">
+<sc-for list="{{ deployments }}" as="d" hint-placeholder-count="4">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:13px 15px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:8px;height:8px;border-radius:50%;background:{{ d.color }};flex:none"></div>
+<div style="flex:1;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px">{{ d.sha }}</div>
+<div style="font:500 11px 'Instrument Sans',system-ui,-apple-system,sans-serif;background:{{ d.chipBg }};color:{{ d.color }};border-radius:9px;padding:3px 8px">{{ d.state }}</div>
+</div>
+<div style="font-size:13px;color:var(--tx)">{{ d.msg }}</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ d.branch }} · {{ d.dur }} · {{ d.ago }}</div>
+</div>
+</sc-for>
+<div style="font-size:14px;font-weight:500;padding:10px 4px 2px">Build log · dpl_9fK2</div>
+<div style="background:var(--code);border:1px solid var(--ol);border-radius:16px;padding:12px 0;overflow:auto">
+<sc-for list="{{ buildLog }}" as="l" hint-placeholder-count="8">
+<div style="display:flex;gap:10px;padding:1px 14px;white-space:pre;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11.5px;line-height:18px">
+<span style="color:#52525b;flex:none">{{ l.t }}</span><span style="color:{{ l.color }}">{{ l.m }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isMonitor }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;animation:dcfade .18s ease">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<sc-for list="{{ monitorMetrics }}" as="m" hint-placeholder-count="4">
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:13px 14px">
+<div style="font-size:11px;color:var(--t2)">{{ m.k }}</div>
+<div style="font-size:19px;font-weight:500;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;margin-top:3px;color:{{ m.color }}">{{ m.v }}</div>
+<div style="font-size:11px;color:var(--t2);margin-top:2px">{{ m.sub }}</div>
+</div>
+</sc-for>
+</div>
+<div style="font-size:14px;font-weight:500;padding:8px 4px 0">Sentry · unresolved issues</div>
+<sc-for list="{{ issues }}" as="i" hint-placeholder-count="4">
+<button type="button" onClick="{{ i.open }}" style="text-align:left;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:16px;padding:13px 15px;display:flex;flex-direction:column;gap:5px;cursor:pointer;font-family:'Instrument Sans',system-ui,-apple-system,sans-serif" style-hover="background:var(--c2)">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font:500 10px 'Instrument Sans',system-ui,-apple-system,sans-serif;letter-spacing:.4px;background:{{ i.chipBg }};color:{{ i.color }};border-radius:5px;padding:3px 7px">{{ i.level }}</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2)">{{ i.events }} events · {{ i.users }} users</div>
+</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px;color:var(--tx)">{{ i.type }}</div>
+<div style="font-size:12.5px;line-height:17px;color:var(--t2)">{{ i.msg }}</div>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px;animation:dcfade .18s ease;padding-top:4px">
+
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px">
+<div><div style="font-size:14px;font-weight:500">Dark theme</div><div style="font-size:12.5px;color:var(--t2);margin-top:2px">Follows the system by default</div></div>
+<button type="button" onClick="{{ toggleTheme }}" style="width:44px;height:24px;border-radius:100px;border:1px solid {{ themeSw.border }};background:{{ themeSw.bg }};position:relative;cursor:pointer;flex:none">
+<div style="position:absolute;top:2px;left:{{ themeSw.left }};width:18px;height:18px;border-radius:50%;background:{{ themeSw.knob }};box-shadow:0 1px 2px rgba(9,9,11,.2);transition:left .16s"></div>
+</button>
+</div>
+
+<sc-for list="{{ settingsSections }}" as="g" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--t2);padding:0 4px">{{ g.name }}</div>
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;overflow:hidden">
+<sc-for list="{{ g.items }}" as="s" hint-placeholder-count="3">
+<button type="button" onClick="{{ s.act }}" style="width:100%;text-align:left;border:0;border-top:1px solid {{ s.divider }};background:transparent;padding:13px 15px;display:flex;align-items:center;gap:12px;cursor:pointer;font-family:'Instrument Sans',system-ui,sans-serif;min-height:56px" style-hover="background:var(--c2)">
+<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;color:{{ s.color }}">{{ s.label }}</div><div style="font-size:12.5px;line-height:17px;color:var(--t2);margin-top:2px">{{ s.sub }}</div></div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:12px;color:var(--t2);flex:none">{{ s.value }}</div>
+<span style="color:var(--t2);flex:none;font-size:13px">{{ s.chev }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11px;color:var(--t2);text-align:center;padding:4px 0 8px">DataCom 0.4.1 · local-first · no account</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isKeys }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;animation:dcfade .18s ease;padding-top:4px">
+<div style="background:var(--c2);border:1px solid var(--ol);border-radius:16px;padding:12px 14px;font-size:12.5px;line-height:18px;color:var(--t2)">Secrets are encrypted with the Android keystore and never leave this device. Prefer read-only tokens with the narrowest scope.</div>
+<sc-for list="{{ credentials }}" as="k" hint-placeholder-count="6">
+<button type="button" onClick="{{ k.open }}" style="text-align:left;border:1px solid var(--ol);background:var(--c1);box-shadow:var(--card);border-radius:16px;padding:13px 15px;display:flex;align-items:center;gap:12px;cursor:pointer;font-family:'Instrument Sans',system-ui,sans-serif" style-hover="background:var(--c2)">
+<div style="width:34px;height:34px;border-radius:10px;flex:none;background:var(--c2);border:1px solid var(--ol);color:var(--t2);display:flex;align-items:center;justify-content:center;font:500 10.5px 'IBM Plex Mono',ui-monospace,monospace">{{ k.abbr }}</div>
+<div style="flex:1;min-width:0">
+<div style="font-size:14px;font-weight:500;color:var(--tx)">{{ k.name }}</div>
+<div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--t2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ k.masked }}</div>
+</div>
+<div style="flex:none;font:500 10.5px 'Instrument Sans',system-ui,sans-serif;letter-spacing:.03em;background:{{ k.chipBg }};border:1px solid {{ k.color }};color:{{ k.color }};border-radius:9px;padding:3px 7px">{{ k.state }}</div>
+</button>
+</sc-for>
+<button type="button" onClick="{{ newKey }}" style="border:1px solid var(--pr);background:var(--pr);color:var(--onpr);border-radius:12px;padding:12px;font:500 14px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;min-height:44px;margin-top:4px" style-hover="filter:brightness(1.15)">Add credential</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isKeyForm }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:14px;animation:dcfade .18s ease;padding-top:4px">
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="font-size:12.5px;font-weight:500">Provider</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{ keyProviders }}" as="p" hint-placeholder-count="6">
+<button type="button" onClick="{{ p.pick }}" style="border:1px solid {{ p.border }};background:{{ p.bg }};color:{{ p.fg }};border-radius:12px;padding:8px 12px;font:500 12.5px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;min-height:38px">{{ p.label }}</button>
+</sc-for>
+</div>
+</div>
+<sc-for list="{{ keyFields }}" as="f" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:12.5px;font-weight:500">{{ f.label }}</div>
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:12px;padding:0 12px;min-height:40px;display:flex;align-items:center;gap:10px">
+<div style="flex:1;min-width:0;font-family:{{ f.font }};font-size:14px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.value }}</div>
+<sc-if value="{{ f.reveal }}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{ toggleReveal }}" style="flex:none;border:0;background:transparent;color:var(--pr);font:500 12px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;padding:6px">{{ revealLabel }}</button>
+</sc-if>
+</div>
+<div style="font-size:11.5px;line-height:16px;color:var(--t2)">{{ f.hint }}</div>
+</div>
+</sc-for>
+<div style="background:var(--c1);border:1px solid var(--ol);box-shadow:var(--card);border-radius:16px;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:14px">
+<div><div style="font-size:14px;font-weight:500">Require unlock to use</div><div style="font-size:12.5px;color:var(--t2);margin-top:2px">Biometric prompt before each request</div></div>
+<button type="button" onClick="{{ toggleLock }}" style="width:44px;height:24px;border-radius:100px;border:1px solid {{ lockSw.border }};background:{{ lockSw.bg }};position:relative;cursor:pointer;flex:none">
+<div style="position:absolute;top:2px;left:{{ lockSw.left }};width:18px;height:18px;border-radius:50%;background:{{ lockSw.knob }};box-shadow:0 1px 2px rgba(9,9,11,.2);transition:left .16s"></div>
+</button>
+</div>
+<div style="display:flex;gap:8px">
+<button type="button" onClick="{{ verifyKey }}" style="flex:1;border:1px solid var(--ol);background:transparent;color:var(--tx);border-radius:12px;padding:12px;font:500 14px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;min-height:44px" style-hover="background:var(--c2)">{{ verifyLabel }}</button>
+<button type="button" onClick="{{ saveKey }}" style="flex:1;border:1px solid var(--pr);background:var(--pr);color:var(--onpr);border-radius:12px;padding:12px;font:500 14px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;min-height:44px" style-hover="filter:brightness(1.15)">Save credential</button>
+</div>
+<sc-if value="{{ verifyResult }}" hint-placeholder-val="{{ false }}">
+<div style="background:var(--okc);border:1px solid var(--ok);border-radius:12px;padding:11px 13px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:11.5px;line-height:17px;color:var(--tx);white-space:pre-wrap">{{ verifyResult }}</div>
+</sc-if>
+<button type="button" onClick="{{ deleteKey }}" style="border:1px solid var(--ol);background:transparent;color:var(--cr);border-radius:12px;padding:12px;font:500 14px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;min-height:44px" style-hover="background:var(--crc)">Delete credential</button>
+</div>
+</sc-if>
+
+</div>
+
+<sc-if value="{{ showFab }}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{ addConnection }}" style="position:absolute;right:16px;bottom:104px;height:48px;border:1px solid var(--pr);border-radius:12px;background:var(--pr);color:var(--onpr);display:flex;align-items:center;gap:8px;padding:0 16px;font:500 14px 'Instrument Sans',system-ui,sans-serif;cursor:pointer;box-shadow:var(--lift)" style-hover="filter:brightness(1.04)">＋ Connection</button>
+</sc-if>
+
+<div style="flex:none;width:max-content;display:flex;align-items:center;margin:0 auto {{ navBottom }};background:var(--c1);border:1px solid var(--ol);box-shadow:var(--lift);border-radius:100px;padding:4px">
+<sc-for list="{{ nav }}" as="n" hint-placeholder-count="3">
+<button type="button" onClick="{{ n.pick }}" aria-label="{{ n.label }}" title="{{ n.label }}" style="border:0;background:{{ n.pillBg }};border-radius:100px;display:flex;align-items:center;justify-content:center;width:{{ navSize }};height:{{ navSize }};margin:0 1px;padding:0;cursor:pointer;color:{{ n.fg }};position:relative;transition:background .16s,color .16s">
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.d }}"></path></svg>
+<sc-if value="{{ n.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:100px;background:var(--cr);border:1.5px solid var(--c1)"></span></sc-if>
+</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;background:var(--scrim);display:flex;flex-direction:column;justify-content:flex-end;animation:dcfade .15s ease" onClick="{{ closeSheet }}">
+<div style="background:var(--c1);border:1px solid var(--ol);border-bottom:0;border-radius:28px 28px 0 0;padding:12px 6px 22px;animation:dcup .22s cubic-bezier(.2,0,0,1)">
+<div style="width:32px;height:4px;border-radius:100px;background:var(--ol);margin:0 auto 12px"></div>
+<div style="font-size:16px;font-weight:500;padding:4px 20px 10px">{{ sheet.title }}</div>
+<sc-for list="{{ sheet.items }}" as="i" hint-placeholder-count="4">
+<button type="button" onClick="{{ i.act }}" style="width:100%;text-align:left;border:0;background:transparent;padding:14px 20px;display:flex;align-items:center;gap:16px;font:400 15px 'Instrument Sans',system-ui,-apple-system,sans-serif;color:{{ i.color }};cursor:pointer;min-height:52px" style-hover="background:var(--c2)"><span style="width:20px;text-align:center;color:var(--t2)">{{ i.icon }}</span>{{ i.label }}</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:18px;right:18px;bottom:104px;background:var(--c1);color:var(--tx);border:1px solid var(--ol);border-radius:16px;padding:13px 15px;font:400 13.5px 'Instrument Sans',system-ui,sans-serif;display:flex;align-items:center;gap:12px;box-shadow:var(--lift);animation:dcfade .16s ease"><span style="flex:1">{{ toast }}</span></div>
+</sc-if>
+
+</div>
+</div>
+</x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;navCompact&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Navigation&quot;},&quot;navFloating&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Navigation&quot;}}">
+const DARK = {
+  '--bg':'#0c0f1a','--c1':'#191d2c','--c2':'#232838','--c3':'#151925','--tx':'#f3f5fb','--t2':'#9aa2bb',
+  '--ol':'#282e40','--pr':'#7f9dff','--onpr':'#0c0f1a','--prc':'#1d2748','--onprc':'#b9c8ff',
+  '--ok':'#5ecfa4','--okc':'#0f2a22','--wn':'#e0b063','--wnc':'#2b2008','--cr':'#f08a90','--crc':'#2d1518',
+  '--scrim':'rgba(0,0,0,.6)','--code':'#0c0f1a',
+  '--card':'0 1px 2px rgba(0,0,0,.4)','--lift':'0 10px 30px -10px rgba(0,0,0,.6)'
+};
+const CREDS = [
+  {name:'Cloudflare API token', provider:'Cloudflare', abbr:'CF', field:'API token', state:'SET', s:'ok',
+   masked:'cf_live_••••••••••••4f2a', secret:'cf_live_91ka03Zx8dQm7bT2vR4f2a', scope:'Zone.Read, Workers.Read, Analytics.Read'},
+  {name:'Vercel access token', provider:'Vercel', abbr:'VC', field:'Access token', state:'SET', s:'ok',
+   masked:'vc_••••••••••••••••9b17', secret:'vc_8Hq2LmZ04pXe71aRtY9b17', scope:'read:deployments, read:logs'},
+  {name:'Sentry auth token', provider:'Sentry', abbr:'SY', field:'Auth token', state:'SET', s:'ok',
+   masked:'sntrys_••••••••••••02ac', secret:'sntrys_eyJpYXQiOjE3MzQzMjEwMDJhYw', scope:'project:read, event:read'},
+  {name:'assets-prod access key', provider:'AWS S3', abbr:'S3', field:'Secret access key', state:'SET', s:'ok',
+   masked:'AKIA••••••••••••7Q4D', secret:'AKIAQ3M7PLZR29XV7Q4D', scope:'s3:GetObject, s3:ListBucket'},
+  {name:'media-cdn access key', provider:'Cloudflare R2', abbr:'R2', field:'Secret access key', state:'MISSING', s:'crit',
+   masked:'not set', secret:'', scope:''},
+  {name:'Nightwatch token', provider:'Nightwatch', abbr:'NW', field:'API token', state:'MISSING', s:'warn',
+   masked:'not set', secret:'', scope:''}
+];
+const S = {
+  ok:{c:'var(--ok)',b:'var(--okc)'},
+  warn:{c:'var(--wn)',b:'var(--wnc)'},
+  crit:{c:'var(--cr)',b:'var(--crc)'},
+  info:{c:'var(--pr)',b:'var(--prc)'}
+};
+
+class Component extends DCLogic {
+  state = {
+    dark: false, stack: [{s:'dashboard'}], tab: 'dashboard',
+    dbTab:'overview', tableTab:'columns', redisTab:'overview', cfTab:'overview',
+    openQ: 0, sqlDone:false, rowsView:'cards', sqlIdx:0, running:false,
+    sheet:null, toast:null, tls:true, tested:false, acked:false, refreshing:false, alertIdx:0,
+    keyIdx:0, revealed:false, lock:true, verified:false
+  };
+
+  push(s){ this.setState(st=>({stack:[...st.stack, {s}]})); }
+  back = () => this.setState(st=>({stack: st.stack.length>1 ? st.stack.slice(0,-1) : st.stack}));
+  tabTo(t){ this.setState({stack:[{s:t}], tab:t, sheet:null}); }
+  flash(msg){ this.setState({toast:msg}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:null}),2200); }
+
+  cur(){ const st=this.state.stack; return st[st.length-1].s; }
+
+  renderVals(){
+    const cur = this.cur();
+    const dark = this.state.dark;
+    const seg = (on)=>({bg: on?'var(--c1)':'transparent', fg: on?'var(--tx)':'var(--t2)', sh: on?'0 1px 2px rgba(9,9,11,.10)':'none'});
+
+    const titles = {
+      dashboard:['Overview','all systems · updated 12s ago'],
+      alerts:['Alerts','4 active · 2 critical'],
+      inbox:['Notifications','4 alerts · 3 issues'],
+      alert:['Alert',''],
+      infra:['Services','13 connections · 5 platforms'],
+      addType:['New connection',''],
+      addForm:['PostgreSQL',''],
+      db:['orders-primary','postgres 16.2 · eu-west-1'],
+      table:['public.orders',''],
+      redis:['session-cache','redis 7.2 · standalone'],
+      storage:['Object storage',''],
+      bucket:['assets-prod','AWS S3 · eu-west-1'],
+      cloud:['Cloud',''],
+      vercel:['storefront','vercel · production'],
+      monitor:['Monitoring','nightwatch + sentry'],
+      settings:['Settings',''],
+      cf:['acme.io','cloudflare · pro plan'],
+      keys:['Keys & credentials','6 stored · encrypted on device'],
+      keyForm:[this.state.keyIdx===-1 ? 'New credential' : CREDS[this.state.keyIdx].name, this.state.keyIdx===-1 ? '' : CREDS[this.state.keyIdx].provider]
+    };
+    const [title, subtitle] = titles[cur] || ['DataCom',''];
+    const roots = ['dashboard','infra','settings'];
+
+    const alerts = [
+      {id:0, level:'CRITICAL', s:'crit', title:'Connection pool at 96%', detail:'192 of 200 connections in use for 6 minutes. New checkouts are queueing behind the pool.', source:'orders-primary · postgres', ago:'4m ago', cta:'Open orders-primary', target:'db', traceLabel:'pg_stat_activity — longest waiters',
+        metrics:[{k:'Active',v:'192'},{k:'Idle in txn',v:'37'},{k:'Waiting',v:'14'},{k:'Max',v:'200'}],
+        trace:[
+          {n:'1',t:'pid   state                wait_event      dur',c:'#a1a1aa'},
+          {n:'2',t:'44182 idle in transaction  ClientRead      00:06:12',c:'#f87171'},
+          {n:'3',t:'44190 idle in transaction  ClientRead      00:05:48',c:'#f87171'},
+          {n:'4',t:'44231 active               Lock:tuple      00:02:07',c:'#fbbf24'},
+          {n:'5',t:'44240 active               Lock:tuple      00:01:55',c:'#fbbf24'},
+          {n:'6',t:'44255 active               —               00:00:41',c:'#e4e4e7'},
+          {n:'7',t:'',c:'#e4e4e7'},
+          {n:'8',t:'hint: 37 sessions idle in transaction from',c:'#a1a1aa'},
+          {n:'9',t:'      checkout-worker (pgbouncer pool 3)',c:'#a1a1aa'}
+        ]},
+      {id:1, level:'CRITICAL', s:'crit', title:'TypeError spike in checkout', detail:'248 events per minute since the 14:02 deploy. Affecting 1,140 users.', source:'storefront-web · sentry', ago:'11m ago', cta:'Open Sentry issue', target:'monitor', traceLabel:'Stack trace',
+        metrics:[{k:'Events/min',v:'248'},{k:'Users',v:'1,140'},{k:'First seen',v:'14:03'},{k:'Release',v:'2026.8.2'}],
+        trace:[
+          {n:'1',t:"TypeError: Cannot read properties of undefined",c:'#f87171'},
+          {n:'2',t:"  (reading 'total_cents')",c:'#f87171'},
+          {n:'3',t:'',c:'#e4e4e7'},
+          {n:'4',t:'at CartSummary (src/checkout/CartSummary.tsx:64)',c:'#e4e4e7'},
+          {n:'5',t:'  62 | const lines = cart.items ?? [];',c:'#a1a1aa'},
+          {n:'6',t:'  63 | const ship  = cart.shipping;',c:'#a1a1aa'},
+          {n:'7',t:'> 64 | return fmt(ship.total_cents + tax);',c:'#fbbf24'},
+          {n:'8',t:'  65 | }',c:'#a1a1aa'},
+          {n:'9',t:'at renderWithHooks (react-dom.js:16305)',c:'#a1a1aa'},
+          {n:'10',t:'at beginWork (react-dom.js:19073)',c:'#a1a1aa'}
+        ]},
+      {id:2, level:'WARNING', s:'warn', title:'Redis memory at 88%', detail:'3.52 GB of 4.00 GB maxmemory. 1,204 keys evicted in the last hour.', source:'session-cache · redis', ago:'22m ago', cta:'Open session-cache', target:'redis', traceLabel:'Top key prefixes by memory',
+        metrics:[{k:'Used',v:'3.52 GB'},{k:'Peak',v:'3.71 GB'},{k:'Evicted',v:'1,204'},{k:'Hit rate',v:'96.2%'}],
+        trace:[
+          {n:'1',t:'session:*        1.84 GB   612,004 keys',c:'#e4e4e7'},
+          {n:'2',t:'cart:*           0.91 GB   204,118 keys',c:'#e4e4e7'},
+          {n:'3',t:'rate:*           0.42 GB   988,301 keys',c:'#fbbf24'},
+          {n:'4',t:'search:cache:*   0.28 GB    12,440 keys',c:'#e4e4e7'},
+          {n:'5',t:'',c:'#e4e4e7'},
+          {n:'6',t:'hint: rate:* keys carry no TTL',c:'#a1a1aa'}
+        ]},
+      {id:3, level:'WARNING', s:'warn', title:'Replica lag 42s', detail:'orders-replica is 42 seconds behind the primary. Reads routed here may be stale.', source:'orders-replica · postgres', ago:'31m ago', cta:'Open orders-replica', target:'db', traceLabel:'Replication state',
+        metrics:[{k:'Lag',v:'42 s'},{k:'WAL bytes',v:'118 MB'},{k:'State',v:'streaming'},{k:'Slot',v:'replica_1'}],
+        trace:[
+          {n:'1',t:'sent_lsn    0/9F3A12C8',c:'#e4e4e7'},
+          {n:'2',t:'write_lsn   0/9F31A004',c:'#e4e4e7'},
+          {n:'3',t:'flush_lsn   0/9F31A004',c:'#e4e4e7'},
+          {n:'4',t:'replay_lsn  0/9E88C110   <- 42s behind',c:'#fbbf24'}
+        ]}
+    ].map(a=>({...a, color:S[a.s].c, chipBg:S[a.s].b,
+      open:()=>this.setState(st=>({alertIdx:a.id, stack:[...st.stack,{s:'alert'}]}))}));
+
+    const alert = {...alerts[this.state.alertIdx],
+      go:()=>{ const t=alerts[this.state.alertIdx].target; this.push(t); },
+      trace: alerts[this.state.alertIdx].trace.map(l=>({...l, color:l.c}))};
+
+    const svc = (name,host,abbr,s,latency,screen)=>({name,host,abbr,latency,
+      color:S[s].c, chipBg:S[s].b,
+      open:()=>this.push(screen),
+      menu:()=>this.setState({sheet:{title:name, items:[
+        {icon:'⟳',label:'Refresh now',color:'var(--tx)',act:()=>{this.setState({sheet:null});this.flash('Refreshed '+name)}},
+        {icon:'★',label:'Pin to dashboard',color:'var(--tx)',act:()=>{this.setState({sheet:null});this.flash(name+' pinned')}},
+        {icon:'✎',label:'Edit connection',color:'var(--tx)',act:()=>{this.setState({sheet:null});this.push('addForm')}},
+        {icon:'⌫',label:'Remove from device',color:'var(--cr)',act:()=>{this.setState({sheet:null});this.flash(name+' removed')}}
+      ]}})
+    });
+
+    const groups = [
+      {name:'Databases', meta:'5 · 1 critical', items:[
+        svc('orders-primary','pg://10.0.4.11:5432/orders','PG','crit','8 ms','db'),
+        svc('orders-replica','pg://10.0.4.12:5432/orders','PG','warn','11 ms','db'),
+        svc('billing-mysql','mysql://10.0.6.3:3306/billing','MY','ok','6 ms','db'),
+        svc('analytics-mariadb','mysql://10.0.6.9:3306/analytics','MA','ok','9 ms','db'),
+        svc('edge-cache.sqlite','file:///data/edge-cache.sqlite','SQ','ok','1 ms','db')
+      ]},
+      {name:'Redis', meta:'2 · 1 warning', items:[
+        svc('session-cache','redis://10.0.8.2:6379','RD','warn','2 ms','redis'),
+        svc('queue-bus','redis://cluster.acme.internal:6379','RC','ok','3 ms','redis')
+      ]},
+      {name:'Object storage', meta:'4 · healthy', items:[
+        svc('assets-prod','s3.eu-west-1.amazonaws.com','S3','ok','41 ms','bucket'),
+        svc('media-cdn','media.r2.cloudflarestorage.com','R2','ok','29 ms','bucket'),
+        svc('backups-minio','minio.acme.internal:9000','MI','ok','7 ms','bucket'),
+        svc('uploads-spaces','ams3.digitaloceanspaces.com','DO','ok','58 ms','bucket')
+      ]}
+    ];
+
+    const typeGroups = [
+      {name:'Databases', items:['PostgreSQL|PG','MySQL|MY','MariaDB|MA','SQLite|SQ','SQL Server|MS']},
+      {name:'Cache & storage', items:['Redis|RD','AWS S3|S3','Cloudflare R2|R2','MinIO|MI','DO Spaces|DO']},
+      {name:'Cloud & observability', items:['Cloudflare|CF','Vercel|VC','Laravel Cloud|LC','Nightwatch|NW','Sentry|SY']}
+    ].map(g=>({name:g.name, items:g.items.map(x=>{
+      const [name,abbr]=x.split('|');
+      const on = name==='PostgreSQL';
+      return {name, abbr, border: on?'var(--pr)':'var(--ol)', bg: on?'var(--prc)':'transparent',
+        chipBg: on?'var(--bg)':'var(--c2)', color:'var(--pr)', pick:()=>this.push('addForm')};
+    })}));
+
+    const formFields = [
+      {label:'Connection name', value:'orders-primary', font:'Instrument Sans,system-ui,sans-serif'},
+      {label:'Host', value:'10.0.4.11', font:'IBM Plex Mono,ui-monospace,monospace'},
+      {label:'Port', value:'5432', font:'IBM Plex Mono,ui-monospace,monospace'},
+      {label:'Database', value:'orders', font:'IBM Plex Mono,ui-monospace,monospace'},
+      {label:'User', value:'datacom_ro', font:'IBM Plex Mono,ui-monospace,monospace'},
+      {label:'Password', value:'••••••••••••', font:'IBM Plex Mono,ui-monospace,monospace'}
+    ];
+
+    const q = (sql,mean,calls,share,s,plan,hint)=>({sql,mean,calls,share,color:S[s].c,plan,hint});
+    const slowQueriesRaw = [
+      q('SELECT o.*, c.email FROM orders o JOIN customers c ON c.id = o.customer_id WHERE o.status = $1 ORDER BY o.created_at DESC LIMIT 50','4.21 s','142','38% of time','crit',
+        [{t:'Limit  (cost=98421..98421 rows=50)',c:'#e4e4e7'},
+         {t:' Sort  (actual time=4180..4181 rows=50)',c:'#e4e4e7'},
+         {t:'  Sort Key: o.created_at DESC',c:'#a1a1aa'},
+         {t:'  Hash Join  (actual time=812..3990)',c:'#e4e4e7'},
+         {t:'   Seq Scan on orders o  rows=1248913',c:'#f87171'},
+         {t:'    Filter: (status = $1)  removed 1.19M',c:'#fbbf24'}],
+        'orders_created_at_idx is not selected because status has no supporting index. A composite index on (status, created_at desc) removes the sequential scan.'),
+      q("UPDATE inventory SET reserved = reserved + $1 WHERE sku = $2",'2.91 s','1,024','24% of time','crit',
+        [{t:'Update on inventory  (actual time=2905..2905)',c:'#e4e4e7'},
+         {t:' Index Scan using inventory_sku_key',c:'#e4e4e7'},
+         {t:'  Rows Removed by Lock Wait: 0',c:'#a1a1aa'},
+         {t:'  Lock wait: 2.84 s on tuple lock',c:'#f87171'}],
+        'Time is spent waiting on a row lock, not on the scan. Contending sessions come from checkout-worker holding open transactions.'),
+      q('SELECT count(*) FROM events WHERE created_at > now() - interval \'24 hours\'','1.84 s','96','11% of time','warn',
+        [{t:'Aggregate  (actual time=1836..1836 rows=1)',c:'#e4e4e7'},
+         {t:' Index Only Scan using events_created_at_idx',c:'#e4e4e7'},
+         {t:'  Heap Fetches: 812004',c:'#fbbf24'}],
+        'High heap fetches indicate the visibility map is stale. A manual VACUUM on events restores the index-only path.'),
+      q('SELECT * FROM order_items WHERE order_id = ANY($1)','0.74 s','8,412','9% of time','warn',
+        [{t:'Index Scan using order_items_order_id_idx',c:'#e4e4e7'},
+         {t:' Rows: 4.8M  loops=214',c:'#a1a1aa'}],
+        'Called 214 times per request. Batching the ids into a single call removes most of the round trips.')
+    ].map((x,i)=>({...x, open:this.state.openQ===i, caret:this.state.openQ===i?'▲':'▼',
+      toggle:()=>this.setState(st=>({openQ: st.openQ===i?-1:i}))}));
+
+    const tables = [
+      {name:'orders', rows:'1,248,913', cols:'14', idx:'4', size:'842 MB'},
+      {name:'order_items', rows:'4,812,660', cols:'9', idx:'3', size:'2.1 GB'},
+      {name:'customers', rows:'312,004', cols:'18', idx:'5', size:'96 MB'},
+      {name:'inventory', rows:'88,412', cols:'11', idx:'3', size:'34 MB'},
+      {name:'events', rows:'22,410,882', cols:'7', idx:'2', size:'412 MB'},
+      {name:'schema_migrations', rows:'182', cols:'2', idx:'1', size:'48 kB'}
+    ].map(t=>({...t, open:()=>this.push('table')}));
+
+    const columns = [
+      {name:'id', type:'bigint · not null', badge:'PK'},
+      {name:'customer_id', type:'bigint · not null', badge:'FK'},
+      {name:'status', type:'text · not null · default \'pending\'', badge:''},
+      {name:'total_cents', type:'integer · not null', badge:''},
+      {name:'currency', type:'char(3) · not null', badge:''},
+      {name:'shipped_at', type:'timestamptz · null', badge:''},
+      {name:'created_at', type:'timestamptz · not null', badge:'IDX'}
+    ];
+    const indexes = [
+      {name:'orders_pkey', def:'UNIQUE btree (id)', stat:'412 M scans · 26 MB', color:'var(--ok)'},
+      {name:'orders_customer_id_idx', def:'btree (customer_id)', stat:'88 M scans · 18 MB', color:'var(--ok)'},
+      {name:'orders_created_at_idx', def:'btree (created_at DESC)', stat:'0 scans · 21 MB · unused', color:'var(--wn)'},
+      {name:'orders_status_idx', def:'btree (status) WHERE status <> \'done\'', stat:'2.1 M scans · 4 MB', color:'var(--ok)'}
+    ];
+    const row = (head,status,s,fields)=>({head,status,color:S[s].c,chipBg:S[s].b,fields,
+      cells:[head,...fields.map(f=>f.v)]});
+    const tableRows = [
+      row('#84 220 913','paid','ok',[{k:'customer_id',v:'204 118'},{k:'total_cents',v:'12 480'},{k:'currency',v:'EUR'},{k:'created_at',v:'2026-08-05 14:12:08'}]),
+      row('#84 220 912','pending','warn',[{k:'customer_id',v:'88 402'},{k:'total_cents',v:'3 900'},{k:'currency',v:'GBP'},{k:'created_at',v:'2026-08-05 14:11:52'}]),
+      row('#84 220 911','failed','crit',[{k:'customer_id',v:'311 006'},{k:'total_cents',v:'24 000'},{k:'currency',v:'EUR'},{k:'created_at',v:'2026-08-05 14:11:40'}])
+    ];
+
+    const snippets = [
+      {label:'pool usage', sql:"SELECT state, count(*)\n  FROM pg_stat_activity\n GROUP BY state\n ORDER BY 2 DESC;"},
+      {label:'idle in txn', sql:"SELECT pid, application_name, now() - xact_start AS dur\n  FROM pg_stat_activity\n WHERE state = 'idle in transaction'\n ORDER BY dur DESC;"},
+      {label:'table sizes', sql:"SELECT relname, pg_size_pretty(pg_total_relation_size(oid))\n  FROM pg_class ORDER BY pg_total_relation_size(oid) DESC;"},
+      {label:'blocking', sql:"SELECT * FROM pg_locks WHERE NOT granted;"}
+    ].map((s,i)=>({label:s.label, pick:()=>this.setState({sqlIdx:i, sqlDone:false})}));
+
+    const resultRows = [
+      row('idle in transaction','37 sessions','crit',[{k:'application',v:'checkout-worker'},{k:'oldest',v:'00:06:12'},{k:'avg',v:'00:02:41'}]),
+      row('active','54 sessions','warn',[{k:'application',v:'api-server'},{k:'oldest',v:'00:02:07'},{k:'avg',v:'00:00:18'}]),
+      row('idle','101 sessions','ok',[{k:'application',v:'api-server'},{k:'oldest',v:'00:14:02'},{k:'avg',v:'00:03:20'}])
+    ];
+
+    const keys = [
+      {key:'session:u:204118:web', type:'hash', size:'2.4 kB', ttl:'23m', color:'var(--ok)'},
+      {key:'session:u:88402:ios', type:'hash', size:'1.9 kB', ttl:'4m', color:'var(--wn)'},
+      {key:'session:u:311006:web', type:'hash', size:'2.1 kB', ttl:'—', color:'var(--cr)'},
+      {key:'session:idx:active', type:'zset', size:'812 kB', ttl:'1h 12m', color:'var(--ok)'},
+      {key:'session:lock:checkout', type:'string', size:'64 B', ttl:'8s', color:'var(--wn)'}
+    ];
+    const slowlog = [
+      {dur:'184 ms', ago:'2m ago', cmd:'KEYS session:*', color:'var(--cr)'},
+      {dur:'96 ms', ago:'9m ago', cmd:'ZRANGEBYSCORE session:idx:active 0 +inf', color:'var(--wn)'},
+      {dur:'62 ms', ago:'14m ago', cmd:'HGETALL cart:u:204118', color:'var(--wn)'},
+      {dur:'41 ms', ago:'26m ago', cmd:'SMEMBERS rate:ip:81.2.44.9', color:'var(--t2)'}
+    ];
+
+    const buckets = [
+      {name:'assets-prod', provider:'AWS S3', region:'eu-west-1', size:'1.42 TB', objects:'2.1 M objects', abbr:'S3', s:'ok'},
+      {name:'media-cdn', provider:'Cloudflare R2', region:'auto', size:'412 GB', objects:'884 k objects', abbr:'R2', s:'ok'},
+      {name:'backups-minio', provider:'MinIO', region:'on-prem', size:'88 GB', objects:'12 k objects', abbr:'MI', s:'ok'},
+      {name:'uploads-spaces', provider:'DO Spaces', region:'ams3', size:'22 GB', objects:'402 k objects', abbr:'DO', s:'warn'}
+    ].map(b=>({...b, color:S[b.s].c, chipBg:S[b.s].b, open:()=>this.push('bucket')}));
+
+    const objects = [
+      {name:'hero-summer-2026.webp', ext:'WEBP', size:'482 kB', modified:'2026-08-05 12:04'},
+      {name:'catalog-export-full.csv', ext:'CSV', size:'184 MB', modified:'2026-08-05 06:00'},
+      {name:'invoice-84220913.pdf', ext:'PDF', size:'112 kB', modified:'2026-08-04 22:41'},
+      {name:'product-3418-detail.jpg', ext:'JPG', size:'1.2 MB', modified:'2026-08-04 19:08'},
+      {name:'backup-orders-0805.sql.gz', ext:'GZ', size:'2.8 GB', modified:'2026-08-04 03:00'},
+      {name:'sitemap.xml', ext:'XML', size:'88 kB', modified:'2026-08-03 11:20'}
+    ].map(o=>({...o, open:()=>this.setState({sheet:{title:o.name, items:[
+      {icon:'◱',label:'Preview object',color:'var(--tx)',act:()=>{this.setState({sheet:null});this.flash('Preview not available offline')}},
+      {icon:'ⓘ',label:o.size+' · '+o.modified,color:'var(--t2)',act:()=>this.setState({sheet:null})},
+      {icon:'⇩',label:'Download to device',color:'var(--tx)',act:()=>{this.setState({sheet:null});this.flash('Downloading '+o.name)}},
+      {icon:'⌫',label:'Delete object',color:'var(--cr)',act:()=>{this.setState({sheet:null});this.flash('Delete requires write credentials')}}
+    ]}})}));
+
+    const cloudCards = [
+      {name:'Cloudflare', sub:'acme.io · 4 zones', abbr:'CF', s:'ok', stats:[{v:'12',k:'workers'},{v:'0',k:'5xx / min'},{v:'98.4%',k:'cache hit'}], go:'cf'},
+      {name:'Vercel', sub:'storefront · production', abbr:'VC', s:'warn', stats:[{v:'1',k:'building'},{v:'2m 41s',k:'last build'},{v:'214 ms',k:'p95 edge'}], go:'vercel'},
+      {name:'Laravel Cloud', sub:'api-gateway · eu', abbr:'LC', s:'ok', stats:[{v:'4',k:'queues'},{v:'0',k:'failed jobs'},{v:'62%',k:'cpu'}], go:'cloud'}
+    ].map(c=>({...c, color:S[c.s].c, chipBg:S[c.s].b, open:()=>this.push(c.go)}));
+
+    const deployments = [
+      {sha:'9fK2a41', state:'BUILDING', s:'warn', msg:'fix: guard missing shipping on cart summary', branch:'main', dur:'1m 12s', ago:'now'},
+      {sha:'7cD8f02', state:'ERROR', s:'crit', msg:'feat: new checkout summary', branch:'main', dur:'2m 41s', ago:'42m ago'},
+      {sha:'22aB19c', state:'READY', s:'ok', msg:'chore: bump deps', branch:'main', dur:'2m 08s', ago:'5h ago'},
+      {sha:'0e91Bc4', state:'READY', s:'ok', msg:'fix: pricing rounding', branch:'main', dur:'1m 58s', ago:'yesterday'}
+    ].map(d=>({...d, color:S[d.s].c, chipBg:S[d.s].b}));
+
+    const buildLog = [
+      ['14:41:02','Cloning github.com/acme/storefront (main)','#e4e4e7'],
+      ['14:41:06','Restored build cache in 1.2s','#a1a1aa'],
+      ['14:41:09','Running "npm run build"','#e4e4e7'],
+      ['14:41:24','▲ Next.js 15.3.1','#a1a1aa'],
+      ['14:41:52','Creating an optimized production build','#e4e4e7'],
+      ['14:42:31','✓ Compiled successfully in 39s','#4ade80'],
+      ['14:42:33','Collecting page data','#e4e4e7'],
+      ['14:42:48','⚠ Large page data on /checkout (218 kB)','#fbbf24'],
+      ['14:42:55','Generating static pages (41/41)','#e4e4e7'],
+      ['14:43:01','Uploading build outputs…','#a1a1aa']
+    ].map(([t,m,c])=>({t,m,color:c}));
+
+    const issues = [
+      {level:'ERROR', s:'crit', type:'TypeError', msg:"Cannot read properties of undefined (reading 'total_cents')", events:'2.4k', users:'1,140'},
+      {level:'ERROR', s:'crit', type:'QueryException', msg:'SQLSTATE[53300] too many connections for role datacom_rw', events:'318', users:'204'},
+      {level:'WARNING', s:'warn', type:'TimeoutError', msg:'Upstream timeout calling payments.acme.io after 5000 ms', events:'96', users:'88'},
+      {level:'WARNING', s:'warn', type:'ChunkLoadError', msg:'Loading chunk 4182 failed after release 2026.8.2', events:'42', users:'40'}
+    ].map(i=>({...i, color:S[i.s].c, chipBg:S[i.s].b, open:()=>this.setState(st=>({alertIdx:1, stack:[...st.stack,{s:'alert'}]}))}));
+
+    const navItems = [
+      ['dashboard','m3 9.5 9-7 9 7V20a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20z','Home','3'],
+      ['infra','M4 4.5h16v5H4zm0 10h16v5H4zM7.5 7h.01M7.5 17h.01','Services','2'],
+      ['settings','M4 7h9m3 0h4M4 17h4m3 0h9M13 4.5v5M8 14.5v5','Settings','']
+    ].map(([id,d,label,badge])=>{
+      const on = this.state.tab===id;
+      return {d,label,badge, pillBg: on?'var(--pr)':'transparent',
+        fg: on?'var(--onpr)':'var(--t2)', labelFg: on?'var(--pr)':'var(--t2)',
+        pick:()=>this.tabTo(id)};
+    });
+
+    const swOn = (on)=>({border: on?'var(--pr)':'var(--ol)', bg: on?'var(--pr)':'var(--c2)',
+      knob: on?'var(--onpr)':'#ffffff', left: on?'23px':'2px'});
+
+    const series = [38,42,40,55,48,44,61,52,49,58,72,66,61,88,74,69,92,110,96,84,120,142,118,96];
+    const maxV = 150, W = 300, H = 96;
+    const pts = series.map((v,i)=>[ +(i*(W/(series.length-1))).toFixed(2), +(H - 8 - (v/maxV)*(H-20)).toFixed(2) ]);
+    const chartLine = pts.reduce((d,[x,y],i,a)=>{
+      if(!i) return 'M'+x+' '+y;
+      const [px,py]=a[i-1], cx=(px+x)/2;
+      return d+' C'+cx+' '+py+','+cx+' '+y+','+x+' '+y;
+    },'');
+    const chartArea = chartLine+' L'+W+' '+H+' L0 '+H+' Z';
+
+    return {
+      devW: 412, devH: 892,
+      dark, themeVars: dark ? {...DARK, height:'100%'} : {height:'100%'}, themeLabel: dark ? 'Light theme' : 'Dark theme',
+      toggleTheme: ()=>this.setState(st=>({dark:!st.dark})),
+      themeSw: swOn(dark), tls: swOn(this.state.tls), toggleTls: ()=>this.setState(st=>({tls:!st.tls})),
+      title, subtitle, canBack: !roots.includes(cur), isRoot: roots.includes(cur), back: this.back,
+      refresh: ()=>this.flash('All connections refreshed'), refreshGlyph: '⟳',
+      isDashboard: cur==='dashboard', isAlerts: cur==='alerts', isAlert: cur==='alert',
+      isInbox: cur==='inbox', inboxCount: '7',
+      openInbox: ()=>this.push('inbox'),
+      inboxTabs: [['alerts','Needs attention'],['issues','Unresolved issues']].map(([id,label])=>{
+        const c = seg((this.state.inboxTab||'alerts')===id);
+        return {label, bg:c.bg, fg:c.fg, sh:c.sh, pick:()=>this.setState({inboxTab:id})};
+      }),
+      inboxAlerts: (this.state.inboxTab||'alerts')==='alerts',
+      inboxIssues: this.state.inboxTab==='issues',
+      isInfra: cur==='infra', isAddType: cur==='addType', isAddForm: cur==='addForm',
+      isDb: cur==='db', isTable: cur==='table', isRedis: cur==='redis',
+      isStorage: cur==='storage', isBucket: cur==='bucket', isCloud: false,
+      isVercel: cur==='vercel', isMonitor: false, isSettings: cur==='settings',
+      isKeys: cur==='keys', isKeyForm: cur==='keyForm', isCf: cur==='cf',
+      showFab: cur==='infra',
+      addConnection: ()=>this.push('addType'),
+      openAlerts: ()=>this.push('alerts'),
+      healthCounts: [
+        {n:'13', label:'connected', color:'var(--tx)'},
+        {n:'9', label:'healthy', color:'var(--ok)'},
+        {n:'2', label:'warning', color:'var(--wn)'},
+        {n:'2', label:'critical', color:'var(--cr)'}
+      ],
+      chartLine, chartArea, chartX: pts[pts.length-1][0]-1.5, chartY: pts[pts.length-1][1],
+      topAlerts: alerts.slice(0,3),
+      alerts, alert,
+      alertFilters: ['All 4','Critical 2','Warning 2','Muted 0'].map((label,i)=>({label,
+        bg: i===0?'var(--prc)':'transparent', fg: i===0?'var(--onprc)':'var(--tx)',
+        border: i===0?'var(--prc)':'var(--ol)', pick:()=>{}})),
+      ack: ()=>this.flash(this.state.acked?'Alert un-snoozed':'Snoozed for 30 minutes'),
+      ackLabel: 'Snooze',
+      activity: [
+        {t:'14:43', text:'Deployment dpl_9fK2 started', src:'vercel · storefront', color:'var(--wn)'},
+        {t:'14:38', text:'orders-primary crossed 90% pool usage', src:'postgres', color:'var(--cr)'},
+        {t:'14:31', text:'1,204 keys evicted (allkeys-lru)', src:'session-cache', color:'var(--wn)'},
+        {t:'14:12', text:'Nightly backup uploaded, 2.8 GB', src:'backups-minio', color:'var(--ok)'},
+        {t:'13:58', text:'Horizon workers scaled 4 → 8', src:'laravel cloud', color:'var(--pr)'}
+      ],
+      groups, typeGroups, formFields,
+      testConn: ()=>this.setState({tested:true}),
+      testLabel: this.state.tested ? 'Tested ✓' : 'Test connection',
+      testResult: this.state.tested ? 'OK · postgres 16.2 · 8 ms · ssl=on\n14 schemas readable with datacom_ro' : '',
+      saveConn: ()=>{ this.flash('Saved to this device'); this.back(); },
+      dbTabs: [['overview','Health'],['queries','Queries'],['schema','Schema'],['sql','SQL']].map(([id,label])=>{
+        const c = seg(this.state.dbTab===id);
+        return {label, bg:c.bg, fg:c.fg, sh:c.sh, pick:()=>this.setState({dbTab:id})};
+      }),
+      dbOverview: this.state.dbTab==='overview', dbQueries: this.state.dbTab==='queries',
+      dbSchema: this.state.dbTab==='schema', dbSql: this.state.dbTab==='sql',
+      dbMetrics: [
+        {k:'Latency', v:'8 ms', sub:'p95 24 ms', color:'var(--ok)'},
+        {k:'Transactions', v:'412/s', sub:'commit 99.8%', color:'var(--tx)'},
+        {k:'Cache hit', v:'99.1%', sub:'shared buffers', color:'var(--ok)'},
+        {k:'Locks waiting', v:'14', sub:'tuple locks', color:'var(--cr)'},
+        {k:'Database size', v:'3.4 GB', sub:'+120 MB / 24h', color:'var(--tx)'},
+        {k:'Replication', v:'42 s', sub:'orders-replica', color:'var(--wn)'}
+      ],
+      running: [
+        {dur:'2m 07s', sql:'UPDATE inventory SET reserved = reserved + 1 WHERE sku = $1', color:'var(--cr)'},
+        {dur:'41 s', sql:'SELECT o.*, c.email FROM orders o JOIN customers c …', color:'var(--wn)'},
+        {dur:'2 s', sql:'COPY events (id, type, payload) TO STDOUT', color:'var(--t2)'}
+      ],
+      slowQueries: slowQueriesRaw, tables,
+      sqlText: [
+        "SELECT state, count(*)\n  FROM pg_stat_activity\n GROUP BY state\n ORDER BY 2 DESC;",
+        "SELECT pid, application_name,\n       now() - xact_start AS dur\n  FROM pg_stat_activity\n WHERE state = 'idle in transaction'\n ORDER BY dur DESC;",
+        "SELECT relname,\n       pg_size_pretty(pg_total_relation_size(oid))\n  FROM pg_class\n ORDER BY pg_total_relation_size(oid) DESC;",
+        "SELECT * FROM pg_locks WHERE NOT granted;"
+      ][this.state.sqlIdx],
+      sqlSnippets: snippets,
+      runSql: ()=>{ this.setState({running:true}); setTimeout(()=>this.setState({sqlDone:true, running:false}), 420); },
+      runLabel: this.state.running ? 'Running…' : 'Run query',
+      openHistory: ()=>this.setState({sheet:{title:'Recent queries', items:[
+        {icon:'⏱',label:'pg_stat_activity by state · 218 ms',color:'var(--tx)',act:()=>this.setState({sheet:null,sqlIdx:0})},
+        {icon:'⏱',label:'idle in transaction · 96 ms',color:'var(--tx)',act:()=>this.setState({sheet:null,sqlIdx:1})},
+        {icon:'⏱',label:'table sizes · 1.4 s',color:'var(--tx)',act:()=>this.setState({sheet:null,sqlIdx:2})},
+        {icon:'⌫',label:'Clear history',color:'var(--cr)',act:()=>{this.setState({sheet:null});this.flash('Query history cleared')}}
+      ]}}),
+      sqlDone: this.state.sqlDone,
+      rowViews: [['cards','Cards'],['table','Table']].map(([id,label])=>{
+        const c = seg(this.state.rowsView===id);
+        return {label, bg:c.bg, fg:c.fg, sh:c.sh, pick:()=>this.setState({rowsView:id})};
+      }),
+      cardsView: this.state.rowsView==='cards', tableView: this.state.rowsView==='table',
+      resultRows, resultCols: ['state','application','oldest','avg','sessions'],
+      tableTabs: [['columns','Columns'],['indexes','Indexes'],['rows','Rows']].map(([id,label])=>{
+        const c = seg(this.state.tableTab===id);
+        return {label, bg:c.bg, fg:c.fg, sh:c.sh, pick:()=>this.setState({tableTab:id})};
+      }),
+      tabColumns: this.state.tableTab==='columns', tabIndexes: this.state.tableTab==='indexes',
+      tabRows: this.state.tableTab==='rows', columns, indexes, tableRows,
+      redisTabs: [['overview','Health'],['keys','Keys'],['slow','Slow log']].map(([id,label])=>{
+        const c = seg(this.state.redisTab===id);
+        return {label, bg:c.bg, fg:c.fg, sh:c.sh, pick:()=>this.setState({redisTab:id})};
+      }),
+      redisOverview: this.state.redisTab==='overview', redisKeys: this.state.redisTab==='keys',
+      redisSlow: this.state.redisTab==='slow',
+      redisMetrics: [
+        {k:'Keys', v:'1.24 M', sub:'+42 k / hour', color:'var(--tx)'},
+        {k:'Ops/sec', v:'12.4 k', sub:'peak 18.9 k', color:'var(--tx)'},
+        {k:'Hit rate', v:'96.2%', sub:'miss 3.8%', color:'var(--ok)'},
+        {k:'Clients', v:'84', sub:'blocked 2', color:'var(--tx)'},
+        {k:'Evicted', v:'1,204', sub:'last hour', color:'var(--wn)'},
+        {k:'Persistence', v:'AOF', sub:'last save 2m ago', color:'var(--ok)'}
+      ],
+      replicas: [
+        {name:'session-cache-replica-1', lag:'0.1 s', color:'var(--ok)'},
+        {name:'session-cache-replica-2', lag:'0.4 s', color:'var(--ok)'}
+      ],
+      cfTabs: [['overview','Zones'],['workers','Workers'],['security','Security']].map(([id,label])=>{
+        const c = seg(this.state.cfTab===id);
+        return {label, bg:c.bg, fg:c.fg, sh:c.sh, pick:()=>this.setState({cfTab:id})};
+      }),
+      cfOverview: this.state.cfTab==='overview', cfWorkers: this.state.cfTab==='workers',
+      cfSecurity: this.state.cfTab==='security',
+      cfMetrics: [
+        {k:'Requests', v:'84.2 M', sub:'last 24 h', color:'var(--tx)'},
+        {k:'Cache hit', v:'98.4%', sub:'2.1 M misses', color:'var(--ok)'},
+        {k:'Bandwidth', v:'1.42 TB', sub:'cached 1.38 TB', color:'var(--tx)'},
+        {k:'Threats blocked', v:'12.4 k', sub:'0.4% of traffic', color:'var(--wn)'},
+        {k:'Origin 5xx', v:'0.02%', sub:'184 responses', color:'var(--ok)'},
+        {k:'p50 edge TTFB', v:'42 ms', sub:'p95 118 ms', color:'var(--ok)'}
+      ],
+      zones: [
+        {name:'acme.io', plan:'Pro', records:'42', ssl:'full (strict)', requests:'61.8 M', s:'ok'},
+        {name:'acme.dev', plan:'Free', records:'18', ssl:'flexible', requests:'14.2 M', s:'warn'},
+        {name:'acme-cdn.net', plan:'Pro', records:'9', ssl:'full (strict)', requests:'7.9 M', s:'ok'},
+        {name:'acme-status.io', plan:'Free', records:'6', ssl:'full', requests:'312 k', s:'ok'}
+      ].map(z=>({...z, color:S[z.s].c})),
+      dns: [
+        {type:'A', name:'acme.io', value:'104.21.44.9', proxy:'proxied', s:'ok'},
+        {type:'AAAA', name:'acme.io', value:'2606:4700:3033::6815:2c09', proxy:'proxied', s:'ok'},
+        {type:'CNAME', name:'www', value:'acme.io', proxy:'proxied', s:'ok'},
+        {type:'CNAME', name:'assets', value:'media-cdn.r2.dev', proxy:'proxied', s:'ok'},
+        {type:'MX', name:'acme.io', value:'10 mx1.forwardemail.net', proxy:'dns only', s:'info'},
+        {type:'TXT', name:'_dmarc', value:'v=DMARC1; p=quarantine; rua=mailto:dmarc@acme.io', proxy:'dns only', s:'info'},
+        {type:'A', name:'legacy', value:'81.2.44.9', proxy:'dns only', s:'warn'}
+      ].map((d,i)=>({...d, divider: i===0?'transparent':'var(--ol)',
+        proxyColor: d.proxy==='proxied' ? 'var(--ok)' : 'var(--t2)'})),
+      workers: [
+        {name:'api-router', deployed:'2h ago', s:'ok', stats:[{v:'2.1 M',k:'req / h'},{v:'18 ms',k:'p95 cpu'},{v:'0.01%',k:'errors'}]},
+        {name:'image-resize', deployed:'yesterday', s:'warn', stats:[{v:'842 k',k:'req / h'},{v:'96 ms',k:'p95 cpu'},{v:'0.8%',k:'errors'}]},
+        {name:'auth-edge', deployed:'4d ago', s:'ok', stats:[{v:'611 k',k:'req / h'},{v:'12 ms',k:'p95 cpu'},{v:'0.00%',k:'errors'}]},
+        {name:'webhook-fanout', deployed:'6d ago', s:'crit', stats:[{v:'88 k',k:'req / h'},{v:'204 ms',k:'p95 cpu'},{v:'4.2%',k:'errors'}]},
+        {name:'ab-assign', deployed:'2w ago', s:'ok', stats:[{v:'412 k',k:'req / h'},{v:'6 ms',k:'p95 cpu'},{v:'0.00%',k:'errors'}]}
+      ].map(w=>({...w, color:S[w.s].c,
+        stats:w.stats.map((st,i)=>({...st, color: i===2 && parseFloat(st.v)>1 ? 'var(--cr)' : 'var(--tx)'}))})),
+      workerLog: [
+        ['14:43:12','GET /v1/orders 200 · 18ms · LHR','#e4e4e7'],
+        ['14:43:12','cache HIT assets/hero-summer-2026.webp','#a1a1aa'],
+        ['14:43:11','GET /v1/cart 200 · 24ms · CDG','#e4e4e7'],
+        ['14:43:10','subrequest pg-proxy 502 · retry 1','#fbbf24'],
+        ['14:43:10','GET /v1/cart 200 · 96ms · CDG','#e4e4e7'],
+        ['14:43:08','Error: KV namespace SESSIONS rate limited','#f87171'],
+        ['14:43:08','  at handleAuth (auth-edge.ts:41)','#a1a1aa'],
+        ['14:43:07','POST /v1/checkout 200 · 142ms · AMS','#e4e4e7'],
+        ['14:43:05','purge tag=catalog · 4,118 objects','#4ade80'],
+        ['14:43:02','GET /v1/products 200 · 11ms · LHR','#e4e4e7']
+      ].map(([t,m,c])=>({t,m,color:c})),
+      securityEvents: [
+        {action:'BLOCK', s:'crit', rule:'Managed rules · SQLi probe', count:'4,182', ago:'12m ago', detail:'/v1/products?id=1%20OR%201=1 · 81.2.44.9 · RU'},
+        {action:'CHALLENGE', s:'warn', rule:'Rate limit · 100 req/min per IP', count:'6,204', ago:'18m ago', detail:'/v1/checkout · 214 unique IPs · datacenter ASN 14061'},
+        {action:'BLOCK', s:'crit', rule:'Country block · login endpoints', count:'1,412', ago:'42m ago', detail:'/admin/login · CN, KP · WAF rule fw_9b21'},
+        {action:'SKIP', s:'ok', rule:'Allowlist · office egress', count:'812', ago:'1h ago', detail:'92.40.11.0/24 · bypasses managed rules'},
+        {action:'LOG', s:'info', rule:'Bot score < 30 observed', count:'18,904', ago:'2h ago', detail:'verified bots excluded · no action taken'}
+      ].map(e=>({...e, color:S[e.s].c, chipBg:S[e.s].b}),),
+      keys, slowlog, buckets, objects, cloudCards, deployments, buildLog, issues,
+      monitorMetrics: [
+        {k:'Requests', v:'1.24 k/s', sub:'nightwatch', color:'var(--tx)'},
+        {k:'Exceptions', v:'248/min', sub:'up 40× since 14:02', color:'var(--cr)'},
+        {k:'Queue jobs', v:'8.2 k', sub:'0 failed', color:'var(--ok)'},
+        {k:'p95 response', v:'912 ms', sub:'budget 500 ms', color:'var(--wn)'}
+      ],
+      settingsSections: [
+        {name:'Connections', items:[
+          {label:'Manage connections', sub:'Hosts, ports, databases and TLS', value:'13', act:()=>this.tabTo('infra')},
+          {label:'Add a connection', sub:'Database, cache, storage, cloud or observability', value:'', act:()=>this.push('addType')},
+          {label:'Import / export', sub:'Encrypted JSON file on this device', value:'', act:()=>this.flash('Exported datacom-connections.json.enc')}
+        ]},
+        {name:'Credentials', items:[
+          {label:'Keys & credentials', sub:'API tokens, access keys and DSNs', value:'6', act:()=>this.push('keys')},
+          {label:'App lock', sub:'Biometric unlock on launch', value:'On', act:()=>this.flash('Handled by the system keystore')}
+        ]},
+        {name:'Monitoring', items:[
+          {label:'Refresh interval', sub:'How often connections are polled', value:'30 s', act:()=>this.flash('Interval set to 30 s')},
+          {label:'Alert thresholds', sub:'Per-service warning and critical limits', value:'12 rules', act:()=>this.flash('12 rules across 13 connections')},
+          {label:'Slow query threshold', sub:'Applies to every database connection', value:'500 ms', act:()=>this.flash('Threshold set to 500 ms')}
+        ]},
+        {name:'Data', items:[
+          {label:'Cached responses', sub:'Metrics and query results kept offline', value:'48 MB', act:()=>this.flash('Cache cleared')},
+          {label:'Wipe local data', sub:'Removes every connection and credential', value:'', danger:true, act:()=>this.setState({sheet:{title:'Wipe local data?', items:[
+            {icon:'⌫',label:'Delete 13 connections and 6 keys',color:'var(--cr)',act:()=>{this.setState({sheet:null});this.flash('Local data wiped')}},
+            {icon:'✕',label:'Cancel',color:'var(--tx)',act:()=>this.setState({sheet:null})}
+          ]}})}
+        ]}
+      ].map(g=>({name:g.name, items:g.items.map((it,i)=>({...it, chev:'›',
+        color: it.danger ? 'var(--cr)' : 'var(--tx)',
+        divider: i===0 ? 'transparent' : 'var(--ol)'}))})),
+      credentials: CREDS.map((c,i)=>({...c, color:S[c.s].c, chipBg:S[c.s].b,
+        open:()=>this.setState(st=>({keyIdx:i, revealed:false, verified:false, stack:[...st.stack,{s:'keyForm'}]}))})),
+      newKey: ()=>this.setState(st=>({keyIdx:-1, revealed:false, verified:false, stack:[...st.stack,{s:'keyForm'}]})),
+      keyProviders: ['Cloudflare','Vercel','Laravel Cloud','Sentry','Nightwatch','AWS S3','Cloudflare R2','MinIO','DO Spaces'].map(label=>{
+        const on = this.state.keyIdx>=0 && CREDS[this.state.keyIdx].provider===label;
+        return {label, border: on?'var(--pr)':'var(--ol)', bg: on?'var(--pr)':'transparent',
+          fg: on?'var(--onpr)':'var(--tx)', pick:()=>{}};
+      }),
+      keyFields: (()=>{ const c = this.state.keyIdx>=0 ? CREDS[this.state.keyIdx] : {name:'', secret:'', masked:'', scope:'', field:'API token'};
+        return [
+          {label:'Label', value:c.name || 'New credential', font:"'Instrument Sans',system-ui,sans-serif", hint:'Shown wherever this credential is used.', reveal:false},
+          {label:c.field, value: this.state.revealed ? c.secret : c.masked, font:"'IBM Plex Mono',ui-monospace,monospace", hint:'Pasted from your provider dashboard. Stored encrypted.', reveal:true},
+          {label:'Scope', value:c.scope || 'read-only', font:"'IBM Plex Mono',ui-monospace,monospace", hint:'DataCom only ever issues read requests.', reveal:false}
+        ]; })(),
+      toggleReveal: ()=>this.setState(st=>({revealed:!st.revealed})),
+      revealLabel: this.state.revealed ? 'Hide' : 'Reveal',
+      lockSw: swOn(this.state.lock), toggleLock: ()=>this.setState(st=>({lock:!st.lock})),
+      verifyKey: ()=>this.setState({verified:true}),
+      verifyLabel: this.state.verified ? 'Verified ✓' : 'Verify token',
+      verifyResult: this.state.verified ? '200 OK · 128 ms\nscopes: '+((this.state.keyIdx>=0 && CREDS[this.state.keyIdx].scope) || 'read')+'\nexpires: never' : '',
+      saveKey: ()=>{ this.flash('Credential saved to keystore'); this.back(); },
+      deleteKey: ()=>{ this.flash('Credential deleted'); this.back(); },
+      nav: navItems,
+      navSize: (this.props.navCompact ?? true) ? '38px' : '46px',
+      navBottom: (this.props.navFloating ?? true) ? '16px' : '0',
+      sheet: this.state.sheet, closeSheet: ()=>this.setState({sheet:null}),
+      toast: this.state.toast
+    };
+  }
+}
+
+</script>
+</body>
+</html>
