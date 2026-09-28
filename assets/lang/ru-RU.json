@@ -159,5 +159,20 @@
   "table_tab_columns": "Столбцы",
   "table_tab_indexes": "Индексы",
   "table_tab_rows": "Строки",
-  "table_rows_hint": "1 248 913 строк · показаны 3 · сортировка по created_at desc"
+  "table_rows_hint": "1 248 913 строк · показаны 3 · сортировка по created_at desc",
+  "monitor_title": "Мониторинг",
+  "monitor_subtitle": "nightwatch + sentry",
+  "monitor_issues_title": "Sentry · нерешённые проблемы",
+  "cloudflare_subtitle": "cloudflare · тариф pro",
+  "cloudflare_tab_zones": "Зоны",
+  "cloudflare_tab_workers": "Воркеры",
+  "cloudflare_tab_security": "Безопасность",
+  "cloudflare_zones_title": "Зоны",
+  "cloudflare_zone_meta": "{plan} · {records} записей · SSL {ssl}",
+  "cloudflare_dns_title": "DNS · {zone}",
+  "cloudflare_workers_hint": "12 воркеров · 4,2 млн запросов за последний час",
+  "cloudflare_worker_log_title": "Логи воркера · api-router",
+  "laravel_cloud_title": "Laravel Cloud",
+  "laravel_cloud_not_found": "Подключение Laravel Cloud не найдено",
+  "laravel_cloud_note": "Этот экран не был частью исходного дизайна — здесь показаны только сводные показатели с карточки Сервисов."
 }

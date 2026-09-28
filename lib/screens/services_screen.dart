@@ -240,10 +240,16 @@ class _CloudCardTile extends StatelessWidget {
 
     return DataComCard(
       onTap: () {
-        if (cloud.name == 'Vercel') {
-          context.push('/services/cloud/vercel/${Uri.encodeComponent(cloud.name)}', extra: cloud.name);
-        } else {
-          showDataComToast(context, 'toast_coming_soon'.tr());
+        final id = Uri.encodeComponent(cloud.name);
+        switch (cloud.name) {
+          case 'Vercel':
+            context.push('/services/cloud/vercel/$id', extra: cloud.name);
+          case 'Cloudflare':
+            context.push('/services/cloud/cf/$id', extra: cloud.name);
+          case 'Laravel Cloud':
+            context.push('/services/cloud/laravel');
+          default:
+            showDataComToast(context, 'toast_coming_soon'.tr());
         }
       },
       child: Column(

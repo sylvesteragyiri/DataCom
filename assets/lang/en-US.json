@@ -159,5 +159,20 @@
   "table_tab_columns": "Columns",
   "table_tab_indexes": "Indexes",
   "table_tab_rows": "Rows",
-  "table_rows_hint": "1,248,913 rows · showing 3 · ordered by created_at desc"
+  "table_rows_hint": "1,248,913 rows · showing 3 · ordered by created_at desc",
+  "monitor_title": "Monitoring",
+  "monitor_subtitle": "nightwatch + sentry",
+  "monitor_issues_title": "Sentry · unresolved issues",
+  "cloudflare_subtitle": "cloudflare · pro plan",
+  "cloudflare_tab_zones": "Zones",
+  "cloudflare_tab_workers": "Workers",
+  "cloudflare_tab_security": "Security",
+  "cloudflare_zones_title": "Zones",
+  "cloudflare_zone_meta": "{plan} · {records} records · SSL {ssl}",
+  "cloudflare_dns_title": "DNS · {zone}",
+  "cloudflare_workers_hint": "12 workers · 4.2 M requests in the last hour",
+  "cloudflare_worker_log_title": "Worker logs · api-router",
+  "laravel_cloud_title": "Laravel Cloud",
+  "laravel_cloud_not_found": "Laravel Cloud connection not found",
+  "laravel_cloud_note": "This screen wasn't part of the original design — only the summary stats from the Services card are shown here."
 }

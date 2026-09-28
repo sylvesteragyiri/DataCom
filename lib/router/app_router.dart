@@ -6,11 +6,14 @@ import '../screens/add_connection_type_screen.dart';
 import '../screens/alert_detail_screen.dart';
 import '../screens/alerts_screen.dart';
 import '../screens/bucket_detail_screen.dart';
+import '../screens/cloudflare_detail_screen.dart';
 import '../screens/dashboard_screen.dart';
 import '../screens/database_detail_screen.dart';
 import '../screens/inbox_screen.dart';
 import '../screens/key_detail_screen.dart';
 import '../screens/keys_screen.dart';
+import '../screens/laravel_cloud_screen.dart';
+import '../screens/monitor_screen.dart';
 import '../screens/redis_detail_screen.dart';
 import '../screens/services_screen.dart';
 import '../screens/settings_screen.dart';
@@ -109,6 +112,21 @@ final GoRouter appRouter = GoRouter(
                     connectionId: state.pathParameters['connId']!,
                     title: (state.extra as String?) ?? state.pathParameters['connId']!,
                   ),
+                ),
+                GoRoute(
+                  path: 'cloud/cf/:connId',
+                  builder: (context, state) => CloudflareDetailScreen(
+                    connectionId: state.pathParameters['connId']!,
+                    title: (state.extra as String?) ?? state.pathParameters['connId']!,
+                  ),
+                ),
+                GoRoute(
+                  path: 'monitor',
+                  builder: (context, state) => const MonitorScreen(),
+                ),
+                GoRoute(
+                  path: 'cloud/laravel',
+                  builder: (context, state) => const LaravelCloudScreen(),
                 ),
               ],
             ),

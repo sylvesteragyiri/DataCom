@@ -23,6 +23,8 @@ class MockAlertsRepository implements AlertsRepository {
       source: 'orders-primary · postgres',
       ago: '4m ago',
       ctaLabel: 'Open orders-primary',
+      target: AlertTarget.database,
+      targetConnectionId: 'orders-primary',
       traceLabel: 'pg_stat_activity — longest waiters',
       metrics: [
         AlertMetric('Active', '192'),
@@ -51,6 +53,7 @@ class MockAlertsRepository implements AlertsRepository {
       source: 'storefront-web · sentry',
       ago: '11m ago',
       ctaLabel: 'Open Sentry issue',
+      target: AlertTarget.monitor,
       traceLabel: 'Stack trace',
       metrics: [
         AlertMetric('Events/min', '248'),
@@ -80,6 +83,8 @@ class MockAlertsRepository implements AlertsRepository {
       source: 'session-cache · redis',
       ago: '22m ago',
       ctaLabel: 'Open session-cache',
+      target: AlertTarget.redis,
+      targetConnectionId: 'session-cache',
       traceLabel: 'Top key prefixes by memory',
       metrics: [
         AlertMetric('Used', '3.52 GB'),
@@ -105,6 +110,8 @@ class MockAlertsRepository implements AlertsRepository {
       source: 'orders-replica · postgres',
       ago: '31m ago',
       ctaLabel: 'Open orders-replica',
+      target: AlertTarget.database,
+      targetConnectionId: 'orders-replica',
       traceLabel: 'Replication state',
       metrics: [
         AlertMetric('Lag', '42 s'),

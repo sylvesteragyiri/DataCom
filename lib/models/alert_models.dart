@@ -15,6 +15,8 @@ class AlertMetric {
   final String value;
 }
 
+enum AlertTarget { database, redis, monitor }
+
 class Alert {
   const Alert({
     required this.id,
@@ -28,6 +30,8 @@ class Alert {
     required this.traceLabel,
     required this.metrics,
     required this.trace,
+    required this.target,
+    this.targetConnectionId,
   });
 
   final int id;
@@ -41,6 +45,8 @@ class Alert {
   final String traceLabel;
   final List<AlertMetric> metrics;
   final List<TraceLine> trace;
+  final AlertTarget target;
+  final String? targetConnectionId;
 }
 
 class Issue {

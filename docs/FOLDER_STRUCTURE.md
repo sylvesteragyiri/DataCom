@@ -40,7 +40,10 @@ DataCom/
 │   │   ├── bucket_detail_screen.dart    # Object storage bucket detail (object list)
 │   │   ├── vercel_detail_screen.dart    # Vercel detail (deployments + build log)
 │   │   ├── keys_screen.dart             # Keys & credentials (list)
-│   │   └── key_detail_screen.dart       # Credential detail (reveal/verify/save/delete)
+│   │   ├── key_detail_screen.dart       # Credential detail (reveal/verify/save/delete)
+│   │   ├── cloudflare_detail_screen.dart  # Cloudflare detail (Zones/Workers/Security tabs)
+│   │   ├── monitor_screen.dart            # Sentry-style monitoring (reuses dashboard/alerts data, no new repository)
+│   │   └── laravel_cloud_screen.dart      # Laravel Cloud — no design template exists for this one, see its own doc comment
 │   ├── widgets/
 │   │   ├── datacom_app_bar.dart      # Shared header (back/title/subtitle/refresh/inbox) used by every screen
 │   │   ├── datacom_bottom_nav.dart   # Floating pill nav, icon-only — custom-painted from the design's exact SVG paths
@@ -61,7 +64,8 @@ DataCom/
 │   │   ├── redis_models.dart       # Redis detail data classes
 │   │   ├── storage_models.dart     # StorageObject
 │   │   ├── vercel_models.dart      # Deployment/LogLine
-│   │   └── credential_models.dart  # Credential
+│   │   ├── credential_models.dart  # Credential
+│   │   └── cloudflare_models.dart  # Cloudflare detail data classes (reuses LogLine from vercel_models.dart)
 │   ├── services/
 │   │   ├── dashboard_repository.dart   # Abstract DashboardRepository + MockDashboardRepository (local data)
 │   │   ├── alerts_repository.dart      # Abstract AlertsRepository + MockAlertsRepository (local data)
@@ -70,7 +74,8 @@ DataCom/
 │   │   ├── redis_repository.dart       # Abstract RedisRepository + MockRedisRepository (local data)
 │   │   ├── storage_repository.dart     # Abstract StorageRepository + MockStorageRepository (local data)
 │   │   ├── vercel_repository.dart      # Abstract VercelRepository + MockVercelRepository (local data)
-│   │   └── credentials_repository.dart # Abstract CredentialsRepository + MockCredentialsRepository (local data)
+│   │   ├── credentials_repository.dart # Abstract CredentialsRepository + MockCredentialsRepository (local data)
+│   │   └── cloudflare_repository.dart  # Abstract CloudflareRepository + MockCloudflareRepository (local data)
 │   ├── providers/
 │   │   ├── dashboard_providers.dart    # Riverpod providers wiring the dashboard repository to its screen
 │   │   ├── alerts_providers.dart       # Riverpod providers wiring the alerts repository to inbox/alerts/detail
@@ -80,7 +85,8 @@ DataCom/
 │   │   ├── redis_providers.dart        # Family provider keyed by connectionId
 │   │   ├── storage_providers.dart      # Family provider keyed by bucketId
 │   │   ├── vercel_providers.dart       # Family provider keyed by connectionId
-│   │   └── credentials_providers.dart  # List provider + family provider keyed by index
+│   │   ├── credentials_providers.dart  # List provider + family provider keyed by index
+│   │   └── cloudflare_providers.dart   # Family provider keyed by connectionId
 │   └── theme/
 │       └── app_theme.dart      # Light/dark ThemeData + status-color extension/helper from the design's tokens
 ├── test/

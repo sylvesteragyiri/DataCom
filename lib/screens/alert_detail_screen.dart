@@ -48,7 +48,6 @@ class _AlertDetailScreenState extends ConsumerState<AlertDetailScreen> {
                 _acked ? 'toast_snoozed'.tr() : 'toast_unsnoozed'.tr(),
               );
             },
-            onOpenTarget: () => showDataComToast(context, 'toast_coming_soon'.tr()),
           );
         },
       ),
@@ -61,13 +60,23 @@ class _AlertDetailBody extends StatelessWidget {
     required this.alert,
     required this.acked,
     required this.onAck,
-    required this.onOpenTarget,
   });
 
   final Alert alert;
   final bool acked;
   final VoidCallback onAck;
-  final VoidCallback onOpenTarget;
+
+  void _openTarget(BuildContext context) {
+    final id = alert.targetConnectionId;
+    switch (alert.target) {
+      case AlertTarget.database:
+        context.push('/services/db/${Uri.encodeComponent(id!)}', extra: id);
+      case AlertTarget.redis:
+        context.push('/services/redis/${Uri.encodeComponent(id!)}', extra: id);
+      case AlertTarget.monitor:
+        context.push('/services/monitor');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +141,7 @@ class _AlertDetailBody extends StatelessWidget {
           children: [
             Expanded(
               child: FilledButton(
-                onPressed: onOpenTarget,
+                onPressed: () => _openTarget(context),
                 child: Text(alert.ctaLabel),
               ),
             ),
