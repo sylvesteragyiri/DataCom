@@ -6,8 +6,8 @@ import '../screens/alert_detail_screen.dart';
 import '../screens/alerts_screen.dart';
 import '../screens/dashboard_screen.dart';
 import '../screens/inbox_screen.dart';
-import '../screens/placeholder_screen.dart';
 import '../screens/services_screen.dart';
+import '../screens/settings_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -57,8 +57,7 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/settings',
-              builder: (context, state) =>
-                  const PlaceholderScreen(label: 'Settings'),
+              builder: (context, state) => const SettingsScreen(),
             ),
           ],
         ),

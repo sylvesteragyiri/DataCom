@@ -24,14 +24,14 @@ DataCom/
 ├── lib/
 │   ├── main.dart               # App entry point — EasyLocalization + Riverpod + go_router wired up
 │   ├── router/
-│   │   └── app_router.dart     # go_router StatefulShellRoute; Dashboard + Services branches have real routes, Settings is still a placeholder
+│   │   └── app_router.dart     # go_router StatefulShellRoute — all 3 root tabs are real screens now
 │   ├── screens/
 │   │   ├── dashboard_screen.dart      # Dashboard (root)
 │   │   ├── inbox_screen.dart          # Notifications/Inbox (alerts + issues tabs)
 │   │   ├── alerts_screen.dart         # Alerts (full list, filter chips)
 │   │   ├── alert_detail_screen.dart   # Alert detail (metrics, trace console, snooze)
 │   │   ├── services_screen.dart       # Services (root) — grouped connections + cloud cards
-│   │   └── placeholder_screen.dart    # Stand-in body for Settings until Phase 3 builds it
+│   │   └── settings_screen.dart       # Settings (root) — dark toggle, grouped settings, wipe-data confirm
 │   ├── widgets/
 │   │   ├── datacom_app_bar.dart     # Shared header (back/title/subtitle/refresh/inbox) used by every screen
 │   │   ├── datacom_card.dart        # Shared rounded/outlined card surface
@@ -51,7 +51,8 @@ DataCom/
 │   ├── providers/
 │   │   ├── dashboard_providers.dart  # Riverpod providers wiring the dashboard repository to its screen
 │   │   ├── alerts_providers.dart     # Riverpod providers wiring the alerts repository to inbox/alerts/detail
-│   │   └── services_providers.dart   # Riverpod providers wiring the services repository to its screen
+│   │   ├── services_providers.dart   # Riverpod providers wiring the services repository to its screen
+│   │   └── theme_providers.dart      # isDarkModeProvider — drives MaterialApp's themeMode from Settings' toggle
 │   └── theme/
 │       └── app_theme.dart      # Light/dark ThemeData + status-color extension/helper from the design's tokens
 ├── test/
