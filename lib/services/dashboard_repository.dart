@@ -1,4 +1,5 @@
 import '../models/dashboard_models.dart';
+import '../models/status_level.dart';
 
 abstract class DashboardRepository {
   Future<DashboardOverview> getOverview();

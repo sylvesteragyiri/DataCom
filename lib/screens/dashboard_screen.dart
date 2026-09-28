@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../models/dashboard_models.dart';
 import '../providers/dashboard_providers.dart';
 import '../theme/app_theme.dart';
 import '../widgets/datacom_app_bar.dart';
+import '../widgets/datacom_card.dart';
 import '../widgets/datacom_toast.dart';
 import '../widgets/latency_chart.dart';
 
@@ -21,7 +23,7 @@ class DashboardScreen extends ConsumerWidget {
         title: 'dashboard_overview_title'.tr(),
         subtitle: 'dashboard_overview_subtitle'.tr(namedArgs: {'n': '12'}),
         onRefresh: () => showDataComToast(context, 'toast_refreshed'.tr()),
-        onOpenInbox: () {},
+        onOpenInbox: () => context.push('/dashboard/inbox'),
         inboxCount: 7,
       ),
       body: overview.when(
@@ -71,45 +73,6 @@ class _DashboardBody extends StatelessWidget {
   }
 }
 
-Color _statusColor(BuildContext context, StatusLevel? level) {
-  final colors = Theme.of(context).colorScheme;
-  final status = Theme.of(context).extension<DataComStatusColors>()!;
-  switch (level) {
-    case StatusLevel.ok:
-      return status.ok;
-    case StatusLevel.warn:
-      return status.warn;
-    case StatusLevel.critical:
-      return colors.error;
-    case StatusLevel.info:
-      return colors.primary;
-    case null:
-      return colors.onSurface;
-  }
-}
-
-class _Card extends StatelessWidget {
-  const _Card({required this.child, this.padding});
-
-  final Widget child;
-  final EdgeInsetsGeometry? padding;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    return Container(
-      width: double.infinity,
-      padding: padding ?? const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colors.surface,
-        border: Border.all(color: colors.outline),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: child,
-    );
-  }
-}
-
 class _CriticalBanner extends StatelessWidget {
   const _CriticalBanner({required this.banner});
 
@@ -148,7 +111,7 @@ class _CriticalBanner extends StatelessWidget {
           const SizedBox(height: 10),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: colors.error),
-            onPressed: () {},
+            onPressed: () => context.push('/dashboard/alerts'),
             child: Text('dashboard_triage_alerts'.tr(namedArgs: {'n': '4'})),
           ),
         ],
@@ -182,14 +145,14 @@ class _HealthTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _Card(
+    return DataComCard(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       child: Column(
         children: [
           Text(
             '${count.count}',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: _statusColor(context, count.level),
+              color: statusColor(context, count.level),
             ),
           ),
           const SizedBox(height: 3),
@@ -212,7 +175,7 @@ class _LatencyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return _Card(
+    return DataComCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -301,7 +264,7 @@ class _LiveMetricTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return _Card(
+    return DataComCard(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -310,7 +273,7 @@ class _LiveMetricTile extends StatelessWidget {
           Text(metric.labelKey.tr(), style: textTheme.bodySmall),
           Text(
             metric.value,
-            style: textTheme.titleMedium?.copyWith(color: _statusColor(context, metric.level)),
+            style: textTheme.titleMedium?.copyWith(color: statusColor(context, metric.level)),
           ),
           Text(metric.sub, style: textTheme.bodySmall),
         ],
@@ -326,7 +289,7 @@ class _ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _Card(
+    return DataComCard(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Column(
         children: [for (final entry in entries) _ActivityRow(entry: entry)],
@@ -358,7 +321,7 @@ class _ActivityRow extends StatelessWidget {
               width: 8,
               height: 8,
               decoration: BoxDecoration(
-                color: _statusColor(context, entry.level),
+                color: statusColor(context, entry.level),
                 shape: BoxShape.circle,
               ),
             ),

@@ -2,8 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../screens/alert_detail_screen.dart';
+import '../screens/alerts_screen.dart';
 import '../screens/dashboard_screen.dart';
+import '../screens/inbox_screen.dart';
 import '../screens/placeholder_screen.dart';
+import '../screens/services_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -20,6 +24,24 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: '/dashboard',
               builder: (context, state) => const DashboardScreen(),
+              routes: [
+                GoRoute(
+                  path: 'inbox',
+                  builder: (context, state) => const InboxScreen(),
+                ),
+                GoRoute(
+                  path: 'alerts',
+                  builder: (context, state) => const AlertsScreen(),
+                  routes: [
+                    GoRoute(
+                      path: ':alertId',
+                      builder: (context, state) => AlertDetailScreen(
+                        alertId: int.parse(state.pathParameters['alertId']!),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
@@ -27,8 +49,7 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/services',
-              builder: (context, state) =>
-                  const PlaceholderScreen(label: 'Services'),
+              builder: (context, state) => const ServicesScreen(),
             ),
           ],
         ),

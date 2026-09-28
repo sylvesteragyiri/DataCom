@@ -26,9 +26,9 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## Phase 3 — Implementation
 - [x] Add `lib/widgets/`, `lib/models/`, `lib/services/`, `lib/providers/` — created for the Dashboard screen, see [docs/tasks/](tasks/)
-- [~] Build screens per the design, one at a time — **Dashboard done** (critical banner, health tiles, latency chart, live metrics, activity feed); Notifications/Inbox, Alerts, Alert detail, Services, and the rest of the 18-screen inventory in [DESIGN_SUMMARY.md](DESIGN_SUMMARY.md) remain
-- [~] Wire up state management — Riverpod pattern established (repository → provider → `ConsumerWidget`), repeats per screen
-- [ ] Wire up any real data/backend integration — still mock data (`MockDashboardRepository`); real connectors are a separate, larger effort
+- [~] Build screens per the design, one at a time — **done: Dashboard, Notifications/Inbox, Alerts, Alert detail, Services (root)** (5 of 18); Add connection flow, Database/Table/Redis/Storage/Cloud detail screens, Settings, and Keys & credentials remain — see [DESIGN_SUMMARY.md](DESIGN_SUMMARY.md)
+- [~] Wire up state management — Riverpod pattern established (repository → provider → `ConsumerWidget`/`ConsumerStatefulWidget`), repeats per screen
+- [ ] Wire up any real data/backend integration — still mock data (`MockDashboardRepository`, `MockAlertsRepository`); real connectors are a separate, larger effort
 
 ## Phase 4 — Testing & polish
 - [ ] Widget/unit tests for core logic

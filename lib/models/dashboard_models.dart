@@ -1,4 +1,4 @@
-enum StatusLevel { ok, warn, critical, info }
+import 'status_level.dart';
 
 class CriticalBanner {
   const CriticalBanner({required this.criticalCount, required this.detail});

@@ -24,22 +24,36 @@ DataCom/
 ├── lib/
 │   ├── main.dart               # App entry point — EasyLocalization + Riverpod + go_router wired up
 │   ├── router/
-│   │   └── app_router.dart     # go_router StatefulShellRoute, 3 root tabs; Dashboard is real, Services/Settings are placeholders
+│   │   └── app_router.dart     # go_router StatefulShellRoute; Dashboard + Services branches have real routes, Settings is still a placeholder
 │   ├── screens/
-│   │   ├── dashboard_screen.dart    # First real screen — see docs/tasks/ for what it covers
-│   │   └── placeholder_screen.dart  # Stand-in body for Services/Settings until Phase 3 builds them
+│   │   ├── dashboard_screen.dart      # Dashboard (root)
+│   │   ├── inbox_screen.dart          # Notifications/Inbox (alerts + issues tabs)
+│   │   ├── alerts_screen.dart         # Alerts (full list, filter chips)
+│   │   ├── alert_detail_screen.dart   # Alert detail (metrics, trace console, snooze)
+│   │   ├── services_screen.dart       # Services (root) — grouped connections + cloud cards
+│   │   └── placeholder_screen.dart    # Stand-in body for Settings until Phase 3 builds it
 │   ├── widgets/
 │   │   ├── datacom_app_bar.dart     # Shared header (back/title/subtitle/refresh/inbox) used by every screen
+│   │   ├── datacom_card.dart        # Shared rounded/outlined card surface
+│   │   ├── datacom_sheet.dart       # Shared bottom-sheet action menu (design's "sheet" pattern)
 │   │   ├── datacom_toast.dart       # Shared transient confirmation (design's "toast" pattern)
-│   │   └── latency_chart.dart       # Smoothed line+area chart, translated from the design's SVG path math
+│   │   ├── latency_chart.dart       # Smoothed line+area chart, translated from the design's SVG path math
+│   │   └── status_badge.dart        # Small severity pill (CRITICAL/WARNING/ERROR)
 │   ├── models/
-│   │   └── dashboard_models.dart    # Dashboard-only data classes so far
+│   │   ├── status_level.dart      # Shared StatusLevel enum (ok/warn/critical/info)
+│   │   ├── dashboard_models.dart  # Dashboard-specific data classes
+│   │   ├── alert_models.dart      # Alert/Issue/trace data classes
+│   │   └── service_models.dart    # Connection/ConnectionGroup/CloudCard data classes
 │   ├── services/
-│   │   └── dashboard_repository.dart # Abstract DashboardRepository + MockDashboardRepository (local data)
+│   │   ├── dashboard_repository.dart # Abstract DashboardRepository + MockDashboardRepository (local data)
+│   │   ├── alerts_repository.dart    # Abstract AlertsRepository + MockAlertsRepository (local data)
+│   │   └── services_repository.dart  # Abstract ServicesRepository + MockServicesRepository (local data)
 │   ├── providers/
-│   │   └── dashboard_providers.dart  # Riverpod providers wiring the repository to the screen
+│   │   ├── dashboard_providers.dart  # Riverpod providers wiring the dashboard repository to its screen
+│   │   ├── alerts_providers.dart     # Riverpod providers wiring the alerts repository to inbox/alerts/detail
+│   │   └── services_providers.dart   # Riverpod providers wiring the services repository to its screen
 │   └── theme/
-│       └── app_theme.dart      # Light/dark ThemeData + status-color extension from the design's tokens
+│       └── app_theme.dart      # Light/dark ThemeData + status-color extension/helper from the design's tokens
 ├── test/
 │   └── widget_test.dart        # Smoke test: app shell renders with 3 tabs
 ├── LICENSE

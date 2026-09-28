@@ -1,0 +1,63 @@
+import 'status_level.dart';
+
+enum TraceEmphasis { normal, muted, danger, warn }
+
+class TraceLine {
+  const TraceLine(this.text, [this.emphasis = TraceEmphasis.normal]);
+
+  final String text;
+  final TraceEmphasis emphasis;
+}
+
+class AlertMetric {
+  const AlertMetric(this.label, this.value);
+
+  final String label;
+  final String value;
+}
+
+class Alert {
+  const Alert({
+    required this.id,
+    required this.level,
+    required this.levelLabel,
+    required this.title,
+    required this.detail,
+    required this.source,
+    required this.ago,
+    required this.ctaLabel,
+    required this.traceLabel,
+    required this.metrics,
+    required this.trace,
+  });
+
+  final int id;
+  final StatusLevel level;
+  final String levelLabel;
+  final String title;
+  final String detail;
+  final String source;
+  final String ago;
+  final String ctaLabel;
+  final String traceLabel;
+  final List<AlertMetric> metrics;
+  final List<TraceLine> trace;
+}
+
+class Issue {
+  const Issue({
+    required this.level,
+    required this.levelLabel,
+    required this.type,
+    required this.message,
+    required this.events,
+    required this.users,
+  });
+
+  final StatusLevel level;
+  final String levelLabel;
+  final String type;
+  final String message;
+  final String events;
+  final String users;
+}

@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
 
+import '../models/status_level.dart';
+
+/// Maps a [StatusLevel] to the current theme's color for it. Shared across
+/// every screen so status semantics (ok/warn/critical/info) stay consistent.
+Color statusColor(BuildContext context, StatusLevel? level) {
+  final colors = Theme.of(context).colorScheme;
+  final status = Theme.of(context).extension<DataComStatusColors>()!;
+  switch (level) {
+    case StatusLevel.ok:
+      return status.ok;
+    case StatusLevel.warn:
+      return status.warn;
+    case StatusLevel.critical:
+      return colors.error;
+    case StatusLevel.info:
+      return colors.primary;
+    case null:
+      return colors.onSurface;
+  }
+}
+
 @immutable
 class DataComStatusColors extends ThemeExtension<DataComStatusColors> {
   const DataComStatusColors({
