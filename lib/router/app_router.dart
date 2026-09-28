@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../screens/dashboard_screen.dart';
 import '../screens/placeholder_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -17,8 +19,7 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/dashboard',
-              builder: (context, state) =>
-                  const PlaceholderScreen(label: 'Dashboard'),
+              builder: (context, state) => const DashboardScreen(),
             ),
           ],
         ),
@@ -60,21 +61,21 @@ class AppShell extends StatelessWidget {
           index,
           initialLocation: index == navigationShell.currentIndex,
         ),
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Dashboard',
+            icon: const Icon(Icons.home_outlined),
+            selectedIcon: const Icon(Icons.home),
+            label: 'nav_home'.tr(),
           ),
           NavigationDestination(
-            icon: Icon(Icons.dns_outlined),
-            selectedIcon: Icon(Icons.dns),
-            label: 'Services',
+            icon: const Icon(Icons.dns_outlined),
+            selectedIcon: const Icon(Icons.dns),
+            label: 'nav_services'.tr(),
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: const Icon(Icons.settings_outlined),
+            selectedIcon: const Icon(Icons.settings),
+            label: 'nav_settings'.tr(),
           ),
         ],
       ),

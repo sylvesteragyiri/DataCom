@@ -25,10 +25,10 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] Set up basic app shell/navigation — `lib/router/app_router.dart` (go_router `StatefulShellRoute`, 3 tabs) + `lib/theme/app_theme.dart` (light/dark theme from the design's color tokens) + `lib/main.dart` wired up with EasyLocalization/Riverpod/go_router. Placeholder screens only — real screen content is Phase 3.
 
 ## Phase 3 — Implementation
-- [ ] Add `lib/widgets/`, `lib/models/`, `lib/services/` as the first real screen needs them
-- [ ] Build screens per the design, one at a time
-- [ ] Wire up state management
-- [ ] Wire up any data/backend integration
+- [x] Add `lib/widgets/`, `lib/models/`, `lib/services/`, `lib/providers/` — created for the Dashboard screen, see [docs/tasks/](tasks/)
+- [~] Build screens per the design, one at a time — **Dashboard done** (critical banner, health tiles, latency chart, live metrics, activity feed); Notifications/Inbox, Alerts, Alert detail, Services, and the rest of the 18-screen inventory in [DESIGN_SUMMARY.md](DESIGN_SUMMARY.md) remain
+- [~] Wire up state management — Riverpod pattern established (repository → provider → `ConsumerWidget`), repeats per screen
+- [ ] Wire up any real data/backend integration — still mock data (`MockDashboardRepository`); real connectors are a separate, larger effort
 
 ## Phase 4 — Testing & polish
 - [ ] Widget/unit tests for core logic

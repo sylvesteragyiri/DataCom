@@ -18,3 +18,5 @@ windows
 web
 linux
 macos
+# Widget Preview related
+.widget_preview/

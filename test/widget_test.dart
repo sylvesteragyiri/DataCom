@@ -17,7 +17,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Dashboard'), findsWidgets);
+    expect(find.text('Home'), findsWidgets);
     expect(find.text('Services'), findsWidgets);
     expect(find.text('Settings'), findsWidgets);
   });
