@@ -21,6 +21,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'PG',
             status: StatusLevel.critical,
             latency: '8 ms',
+            kind: ConnectionKind.database,
           ),
           ConnectionItem(
             name: 'orders-replica',
@@ -28,6 +29,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'PG',
             status: StatusLevel.warn,
             latency: '11 ms',
+            kind: ConnectionKind.database,
           ),
           ConnectionItem(
             name: 'billing-mysql',
@@ -35,6 +37,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'MY',
             status: StatusLevel.ok,
             latency: '6 ms',
+            kind: ConnectionKind.database,
           ),
           ConnectionItem(
             name: 'analytics-mariadb',
@@ -42,6 +45,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'MA',
             status: StatusLevel.ok,
             latency: '9 ms',
+            kind: ConnectionKind.database,
           ),
           ConnectionItem(
             name: 'edge-cache.sqlite',
@@ -49,6 +53,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'SQ',
             status: StatusLevel.ok,
             latency: '1 ms',
+            kind: ConnectionKind.database,
           ),
         ],
       ),
@@ -62,6 +67,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'RD',
             status: StatusLevel.warn,
             latency: '2 ms',
+            kind: ConnectionKind.redis,
           ),
           ConnectionItem(
             name: 'queue-bus',
@@ -69,6 +75,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'RC',
             status: StatusLevel.ok,
             latency: '3 ms',
+            kind: ConnectionKind.redis,
           ),
         ],
       ),
@@ -82,6 +89,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'S3',
             status: StatusLevel.ok,
             latency: '41 ms',
+            kind: ConnectionKind.storage,
           ),
           ConnectionItem(
             name: 'media-cdn',
@@ -89,6 +97,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'R2',
             status: StatusLevel.ok,
             latency: '29 ms',
+            kind: ConnectionKind.storage,
           ),
           ConnectionItem(
             name: 'backups-minio',
@@ -96,6 +105,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'MI',
             status: StatusLevel.ok,
             latency: '7 ms',
+            kind: ConnectionKind.storage,
           ),
           ConnectionItem(
             name: 'uploads-spaces',
@@ -103,6 +113,7 @@ class MockServicesRepository implements ServicesRepository {
             abbr: 'DO',
             status: StatusLevel.warn,
             latency: '58 ms',
+            kind: ConnectionKind.storage,
           ),
         ],
       ),

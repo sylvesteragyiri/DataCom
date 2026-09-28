@@ -8,6 +8,7 @@ import '../providers/alerts_providers.dart';
 import '../theme/app_theme.dart';
 import '../widgets/datacom_app_bar.dart';
 import '../widgets/datacom_card.dart';
+import '../widgets/datacom_console.dart';
 import '../widgets/datacom_toast.dart';
 
 class AlertDetailScreen extends ConsumerStatefulWidget {
@@ -123,7 +124,9 @@ class _AlertDetailBody extends StatelessWidget {
         const SizedBox(height: 12),
         Text(alert.traceLabel, style: textTheme.titleSmall),
         const SizedBox(height: 6),
-        _TraceConsole(lines: alert.trace),
+        DataComConsole(
+          lines: [for (final line in alert.trace) ConsoleLine(line.text, line.emphasis)],
+        ),
         const SizedBox(height: 12),
         Row(
           children: [
@@ -141,60 +144,6 @@ class _AlertDetailBody extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class _TraceConsole extends StatelessWidget {
-  const _TraceConsole({required this.lines});
-
-  final List<TraceLine> lines;
-
-  static const _normal = Color(0xFFE4E4E7);
-  static const _muted = Color(0xFFA1A1AA);
-  static const _danger = Color(0xFFF87171);
-  static const _warn = Color(0xFFFBBF24);
-
-  Color _colorFor(TraceEmphasis emphasis) {
-    switch (emphasis) {
-      case TraceEmphasis.normal:
-        return _normal;
-      case TraceEmphasis.muted:
-        return _muted;
-      case TraceEmphasis.danger:
-        return _danger;
-      case TraceEmphasis.warn:
-        return _warn;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-      decoration: BoxDecoration(
-        color: const Color(0xFF111528),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (final line in lines)
-              Text(
-                line.text.isEmpty ? ' ' : line.text,
-                style: TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 12,
-                  height: 1.5,
-                  color: _colorFor(line.emphasis),
-                ),
-              ),
-          ],
-        ),
-      ),
     );
   }
 }

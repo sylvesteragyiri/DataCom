@@ -79,6 +79,20 @@ class DataComStatusColors extends ThemeExtension<DataComStatusColors> {
   }
 }
 
+InputDecorationTheme _inputDecorationTheme(ColorScheme colors) {
+  final border = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide(color: colors.outline),
+  );
+  return InputDecorationTheme(
+    filled: true,
+    fillColor: colors.surface,
+    border: border,
+    enabledBorder: border,
+    focusedBorder: border.copyWith(borderSide: BorderSide(color: colors.primary, width: 1.5)),
+  );
+}
+
 final ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
@@ -97,6 +111,11 @@ final ThemeData lightTheme = ThemeData(
     errorContainer: Color(0xFFFDEFF0),
     onErrorContainer: Color(0xFFD13B41),
   ),
+  inputDecorationTheme: _inputDecorationTheme(const ColorScheme.light(
+    primary: Color(0xFF2F5BEA),
+    outline: Color(0xFFE3E7F1),
+    surface: Color(0xFFFFFFFF),
+  )),
   extensions: const [DataComStatusColors.light],
 );
 
@@ -118,5 +137,10 @@ final ThemeData darkTheme = ThemeData(
     errorContainer: Color(0xFF2D1518),
     onErrorContainer: Color(0xFFF08A90),
   ),
+  inputDecorationTheme: _inputDecorationTheme(const ColorScheme.dark(
+    primary: Color(0xFF7F9DFF),
+    outline: Color(0xFF282E40),
+    surface: Color(0xFF191D2C),
+  )),
   extensions: const [DataComStatusColors.dark],
 );

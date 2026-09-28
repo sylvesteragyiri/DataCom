@@ -1,12 +1,11 @@
+import 'console_emphasis.dart';
 import 'status_level.dart';
 
-enum TraceEmphasis { normal, muted, danger, warn }
-
 class TraceLine {
-  const TraceLine(this.text, [this.emphasis = TraceEmphasis.normal]);
+  const TraceLine(this.text, [this.emphasis = ConsoleEmphasis.normal]);
 
   final String text;
-  final TraceEmphasis emphasis;
+  final ConsoleEmphasis emphasis;
 }
 
 class AlertMetric {

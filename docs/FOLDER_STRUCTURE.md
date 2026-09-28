@@ -31,29 +31,56 @@ DataCom/
 │   │   ├── alerts_screen.dart         # Alerts (full list, filter chips)
 │   │   ├── alert_detail_screen.dart   # Alert detail (metrics, trace console, snooze)
 │   │   ├── services_screen.dart       # Services (root) — grouped connections + cloud cards
-│   │   └── settings_screen.dart       # Settings (root) — dark toggle, grouped settings, wipe-data confirm
+│   │   ├── settings_screen.dart       # Settings (root) — dark toggle, grouped settings, wipe-data confirm
+│   │   ├── add_connection_type_screen.dart  # Add connection — connector type picker
+│   │   ├── add_connection_form_screen.dart  # Add connection — form (test/save)
+│   │   ├── database_detail_screen.dart  # Database detail (Health/Queries/Schema/SQL tabs)
+│   │   ├── table_detail_screen.dart     # Table detail (Columns/Indexes/Rows tabs)
+│   │   ├── redis_detail_screen.dart     # Redis detail (Health/Keys/Slow log tabs)
+│   │   ├── bucket_detail_screen.dart    # Object storage bucket detail (object list)
+│   │   ├── vercel_detail_screen.dart    # Vercel detail (deployments + build log)
+│   │   ├── keys_screen.dart             # Keys & credentials (list)
+│   │   └── key_detail_screen.dart       # Credential detail (reveal/verify/save/delete)
 │   ├── widgets/
-│   │   ├── datacom_app_bar.dart     # Shared header (back/title/subtitle/refresh/inbox) used by every screen
-│   │   ├── datacom_bottom_nav.dart  # Floating pill nav, icon-only — custom-painted from the design's exact SVG paths
-│   │   ├── datacom_card.dart        # Shared rounded/outlined card surface
-│   │   ├── datacom_sheet.dart       # Shared bottom-sheet action menu (design's "sheet" pattern)
-│   │   ├── datacom_toast.dart       # Shared transient confirmation (design's "toast" pattern)
-│   │   ├── latency_chart.dart       # Smoothed line+area chart, translated from the design's SVG path math
-│   │   └── status_badge.dart        # Small severity pill (CRITICAL/WARNING/ERROR)
+│   │   ├── datacom_app_bar.dart      # Shared header (back/title/subtitle/refresh/inbox) used by every screen
+│   │   ├── datacom_bottom_nav.dart   # Floating pill nav, icon-only — custom-painted from the design's exact SVG paths
+│   │   ├── datacom_card.dart         # Shared rounded/outlined card surface
+│   │   ├── datacom_console.dart      # Shared dark monospace log/trace viewer (alert traces, EXPLAIN plans, build logs)
+│   │   ├── datacom_segmented_tabs.dart  # Shared in-page tab pill switcher (Health/Keys/Slowlog-style rows)
+│   │   ├── datacom_sheet.dart        # Shared bottom-sheet action menu (design's "sheet" pattern)
+│   │   ├── datacom_toast.dart        # Shared transient confirmation (design's "toast" pattern)
+│   │   ├── latency_chart.dart        # Smoothed line+area chart, translated from the design's SVG path math
+│   │   └── status_badge.dart         # Small severity pill (CRITICAL/WARNING/ERROR)
 │   ├── models/
-│   │   ├── status_level.dart      # Shared StatusLevel enum (ok/warn/critical/info)
-│   │   ├── dashboard_models.dart  # Dashboard-specific data classes
-│   │   ├── alert_models.dart      # Alert/Issue/trace data classes
-│   │   └── service_models.dart    # Connection/ConnectionGroup/CloudCard data classes
+│   │   ├── status_level.dart       # Shared StatusLevel enum (ok/warn/critical/info)
+│   │   ├── console_emphasis.dart   # Shared ConsoleEmphasis enum for DataComConsole lines
+│   │   ├── dashboard_models.dart   # Dashboard-specific data classes
+│   │   ├── alert_models.dart       # Alert/Issue/trace data classes
+│   │   ├── service_models.dart     # Connection/ConnectionGroup/CloudCard data + the static connectorTypeGroups catalog
+│   │   ├── database_models.dart    # Database/Table detail data classes
+│   │   ├── redis_models.dart       # Redis detail data classes
+│   │   ├── storage_models.dart     # StorageObject
+│   │   ├── vercel_models.dart      # Deployment/LogLine
+│   │   └── credential_models.dart  # Credential
 │   ├── services/
-│   │   ├── dashboard_repository.dart # Abstract DashboardRepository + MockDashboardRepository (local data)
-│   │   ├── alerts_repository.dart    # Abstract AlertsRepository + MockAlertsRepository (local data)
-│   │   └── services_repository.dart  # Abstract ServicesRepository + MockServicesRepository (local data)
+│   │   ├── dashboard_repository.dart   # Abstract DashboardRepository + MockDashboardRepository (local data)
+│   │   ├── alerts_repository.dart      # Abstract AlertsRepository + MockAlertsRepository (local data)
+│   │   ├── services_repository.dart    # Abstract ServicesRepository + MockServicesRepository (local data)
+│   │   ├── database_repository.dart    # Abstract DatabaseRepository + MockDatabaseRepository (local data)
+│   │   ├── redis_repository.dart       # Abstract RedisRepository + MockRedisRepository (local data)
+│   │   ├── storage_repository.dart     # Abstract StorageRepository + MockStorageRepository (local data)
+│   │   ├── vercel_repository.dart      # Abstract VercelRepository + MockVercelRepository (local data)
+│   │   └── credentials_repository.dart # Abstract CredentialsRepository + MockCredentialsRepository (local data)
 │   ├── providers/
-│   │   ├── dashboard_providers.dart  # Riverpod providers wiring the dashboard repository to its screen
-│   │   ├── alerts_providers.dart     # Riverpod providers wiring the alerts repository to inbox/alerts/detail
-│   │   ├── services_providers.dart   # Riverpod providers wiring the services repository to its screen
-│   │   └── theme_providers.dart      # isDarkModeProvider — drives MaterialApp's themeMode from Settings' toggle
+│   │   ├── dashboard_providers.dart    # Riverpod providers wiring the dashboard repository to its screen
+│   │   ├── alerts_providers.dart       # Riverpod providers wiring the alerts repository to inbox/alerts/detail
+│   │   ├── services_providers.dart     # Riverpod providers wiring the services repository to its screen
+│   │   ├── theme_providers.dart        # isDarkModeProvider — drives MaterialApp's themeMode from Settings' toggle
+│   │   ├── database_providers.dart     # Family providers keyed by connectionId (+ table name for TableDetailScreen)
+│   │   ├── redis_providers.dart        # Family provider keyed by connectionId
+│   │   ├── storage_providers.dart      # Family provider keyed by bucketId
+│   │   ├── vercel_providers.dart       # Family provider keyed by connectionId
+│   │   └── credentials_providers.dart  # List provider + family provider keyed by index
 │   └── theme/
 │       └── app_theme.dart      # Light/dark ThemeData + status-color extension/helper from the design's tokens
 ├── test/

@@ -26,7 +26,7 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## Phase 3 — Implementation
 - [x] Add `lib/widgets/`, `lib/models/`, `lib/services/`, `lib/providers/` — created for the Dashboard screen, see [docs/tasks/](tasks/)
-- [~] Build screens per the design, one at a time — **done: Dashboard, Notifications/Inbox, Alerts, Alert detail, Services (root), Settings (root)** (6 of 18, all 3 root tabs now real); Add connection flow, Database/Table/Redis/Storage/Cloudflare/Vercel detail, and Keys & credentials remain — see [DESIGN_SUMMARY.md](DESIGN_SUMMARY.md)
+- [~] Build screens per the design, one at a time — **done: Dashboard, Notifications/Inbox, Alerts, Alert detail, Services (root), Settings (root), Add connection (type picker + form), Database detail, Table detail, Redis detail, Bucket detail, Vercel detail, Keys & credentials, Key detail** (15 of 18); only **Cloudflare detail** (Zones/Workers/Security tabs) remains as a real gap — see [DESIGN_SUMMARY.md](DESIGN_SUMMARY.md). The design's own prototype never finished a Laravel Cloud or standalone Monitor screen either (`isCloud`/`isMonitor` are hardcoded `false` in `design-reference/DataCom Calm.dc.html`), so those two aren't really "remaining" — they were never built in the source design.
 - [~] Wire up state management — Riverpod pattern established (repository → provider → `ConsumerWidget`/`ConsumerStatefulWidget`), repeats per screen
 - [ ] Wire up any real data/backend integration — still mock data (`MockDashboardRepository`, `MockAlertsRepository`); real connectors are a separate, larger effort
 

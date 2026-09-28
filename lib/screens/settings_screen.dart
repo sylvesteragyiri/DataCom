@@ -62,7 +62,7 @@ class SettingsScreen extends ConsumerWidget {
               _SettingsRow(
                 label: 'settings_add_connection'.tr(),
                 sub: 'settings_add_connection_sub'.tr(),
-                onTap: () => showDataComToast(context, 'toast_coming_soon'.tr()),
+                onTap: () => context.go('/services/add'),
               ),
               _SettingsRow(
                 label: 'settings_import_export'.tr(),
@@ -78,7 +78,7 @@ class SettingsScreen extends ConsumerWidget {
                 label: 'settings_keys'.tr(),
                 sub: 'settings_keys_sub'.tr(),
                 value: '6',
-                onTap: () => showDataComToast(context, 'toast_coming_soon'.tr()),
+                onTap: () => context.go('/settings/keys'),
               ),
               _SettingsRow(
                 label: 'settings_app_lock'.tr(),

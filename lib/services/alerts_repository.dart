@@ -1,4 +1,5 @@
 import '../models/alert_models.dart';
+import '../models/console_emphasis.dart';
 import '../models/status_level.dart';
 
 abstract class AlertsRepository {
@@ -30,15 +31,15 @@ class MockAlertsRepository implements AlertsRepository {
         AlertMetric('Max', '200'),
       ],
       trace: [
-        TraceLine('pid   state                wait_event      dur', TraceEmphasis.muted),
-        TraceLine('44182 idle in transaction  ClientRead      00:06:12', TraceEmphasis.danger),
-        TraceLine('44190 idle in transaction  ClientRead      00:05:48', TraceEmphasis.danger),
-        TraceLine('44231 active               Lock:tuple      00:02:07', TraceEmphasis.warn),
-        TraceLine('44240 active               Lock:tuple      00:01:55', TraceEmphasis.warn),
+        TraceLine('pid   state                wait_event      dur', ConsoleEmphasis.muted),
+        TraceLine('44182 idle in transaction  ClientRead      00:06:12', ConsoleEmphasis.danger),
+        TraceLine('44190 idle in transaction  ClientRead      00:05:48', ConsoleEmphasis.danger),
+        TraceLine('44231 active               Lock:tuple      00:02:07', ConsoleEmphasis.warn),
+        TraceLine('44240 active               Lock:tuple      00:01:55', ConsoleEmphasis.warn),
         TraceLine('44255 active               —               00:00:41'),
         TraceLine(''),
-        TraceLine('hint: 37 sessions idle in transaction from', TraceEmphasis.muted),
-        TraceLine('      checkout-worker (pgbouncer pool 3)', TraceEmphasis.muted),
+        TraceLine('hint: 37 sessions idle in transaction from', ConsoleEmphasis.muted),
+        TraceLine('      checkout-worker (pgbouncer pool 3)', ConsoleEmphasis.muted),
       ],
     ),
     Alert(
@@ -58,16 +59,16 @@ class MockAlertsRepository implements AlertsRepository {
         AlertMetric('Release', '2026.8.2'),
       ],
       trace: [
-        TraceLine('TypeError: Cannot read properties of undefined', TraceEmphasis.danger),
-        TraceLine("  (reading 'total_cents')", TraceEmphasis.danger),
+        TraceLine('TypeError: Cannot read properties of undefined', ConsoleEmphasis.danger),
+        TraceLine("  (reading 'total_cents')", ConsoleEmphasis.danger),
         TraceLine(''),
         TraceLine('at CartSummary (src/checkout/CartSummary.tsx:64)'),
-        TraceLine('  62 | const lines = cart.items ?? [];', TraceEmphasis.muted),
-        TraceLine('  63 | const ship  = cart.shipping;', TraceEmphasis.muted),
-        TraceLine('> 64 | return fmt(ship.total_cents + tax);', TraceEmphasis.warn),
-        TraceLine('  65 | }', TraceEmphasis.muted),
-        TraceLine('at renderWithHooks (react-dom.js:16305)', TraceEmphasis.muted),
-        TraceLine('at beginWork (react-dom.js:19073)', TraceEmphasis.muted),
+        TraceLine('  62 | const lines = cart.items ?? [];', ConsoleEmphasis.muted),
+        TraceLine('  63 | const ship  = cart.shipping;', ConsoleEmphasis.muted),
+        TraceLine('> 64 | return fmt(ship.total_cents + tax);', ConsoleEmphasis.warn),
+        TraceLine('  65 | }', ConsoleEmphasis.muted),
+        TraceLine('at renderWithHooks (react-dom.js:16305)', ConsoleEmphasis.muted),
+        TraceLine('at beginWork (react-dom.js:19073)', ConsoleEmphasis.muted),
       ],
     ),
     Alert(
@@ -89,10 +90,10 @@ class MockAlertsRepository implements AlertsRepository {
       trace: [
         TraceLine('session:*        1.84 GB   612,004 keys'),
         TraceLine('cart:*           0.91 GB   204,118 keys'),
-        TraceLine('rate:*           0.42 GB   988,301 keys', TraceEmphasis.warn),
+        TraceLine('rate:*           0.42 GB   988,301 keys', ConsoleEmphasis.warn),
         TraceLine('search:cache:*   0.28 GB    12,440 keys'),
         TraceLine(''),
-        TraceLine('hint: rate:* keys carry no TTL', TraceEmphasis.muted),
+        TraceLine('hint: rate:* keys carry no TTL', ConsoleEmphasis.muted),
       ],
     ),
     Alert(
@@ -115,7 +116,7 @@ class MockAlertsRepository implements AlertsRepository {
         TraceLine('sent_lsn    0/9F3A12C8'),
         TraceLine('write_lsn   0/9F31A004'),
         TraceLine('flush_lsn   0/9F31A004'),
-        TraceLine('replay_lsn  0/9E88C110   <- 42s behind', TraceEmphasis.warn),
+        TraceLine('replay_lsn  0/9E88C110   <- 42s behind', ConsoleEmphasis.warn),
       ],
     ),
   ];

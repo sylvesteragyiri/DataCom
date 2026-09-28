@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../models/service_models.dart';
 import '../providers/services_providers.dart';
@@ -24,7 +25,7 @@ class ServicesScreen extends ConsumerWidget {
         onRefresh: () => showDataComToast(context, 'toast_refreshed'.tr()),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => showDataComToast(context, 'toast_coming_soon'.tr()),
+        onPressed: () => context.push('/services/add'),
         icon: const Icon(Icons.add),
         label: Text('services_add_connection'.tr()),
       ),
@@ -110,7 +111,17 @@ class _ConnectionCard extends StatelessWidget {
         Expanded(
           child: DataComCard(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-            onTap: () => showDataComToast(context, 'toast_coming_soon'.tr()),
+            onTap: () {
+              final id = Uri.encodeComponent(item.name);
+              switch (item.kind) {
+                case ConnectionKind.database:
+                  context.push('/services/db/$id', extra: item.name);
+                case ConnectionKind.redis:
+                  context.push('/services/redis/$id', extra: item.name);
+                case ConnectionKind.storage:
+                  context.push('/services/storage/$id', extra: item.name);
+              }
+            },
             child: Row(
               children: [
                 Container(
@@ -228,7 +239,13 @@ class _CloudCardTile extends StatelessWidget {
     final color = statusColor(context, cloud.status);
 
     return DataComCard(
-      onTap: () => showDataComToast(context, 'toast_coming_soon'.tr()),
+      onTap: () {
+        if (cloud.name == 'Vercel') {
+          context.push('/services/cloud/vercel/${Uri.encodeComponent(cloud.name)}', extra: cloud.name);
+        } else {
+          showDataComToast(context, 'toast_coming_soon'.tr());
+        }
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
