@@ -42,7 +42,7 @@ class _AlertsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.fromLTRB(18, 2, 18, 24),
+      padding: const EdgeInsets.fromLTRB(18, 2, 18, 96),
       children: [
         SizedBox(
           height: 40,

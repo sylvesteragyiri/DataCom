@@ -74,7 +74,7 @@ class _AlertDetailBody extends StatelessWidget {
     final color = statusColor(context, alert.level);
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(18, 2, 18, 24),
+      padding: const EdgeInsets.fromLTRB(18, 2, 18, 96),
       children: [
         Container(
           width: double.infinity,

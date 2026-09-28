@@ -37,7 +37,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
         onBack: () => context.pop(),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 2, 18, 24),
+        padding: const EdgeInsets.fromLTRB(18, 2, 18, 96),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

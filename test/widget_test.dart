@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('App shell shows the three root tabs', (tester) async {
+    final semantics = tester.ensureSemantics();
     await EasyLocalization.ensureInitialized();
     await tester.pumpWidget(
       EasyLocalization(
@@ -17,8 +18,11 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Home'), findsWidgets);
-    expect(find.text('Services'), findsWidgets);
-    expect(find.text('Settings'), findsWidgets);
+    // The bottom nav is icon-only (floating pill, no visible labels), so
+    // its tabs are found via accessibility semantics, not find.text.
+    expect(find.bySemanticsLabel('Home'), findsOneWidget);
+    expect(find.bySemanticsLabel('Services'), findsOneWidget);
+    expect(find.bySemanticsLabel('Settings'), findsOneWidget);
+    semantics.dispose();
   });
 }

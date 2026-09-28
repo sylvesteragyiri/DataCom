@@ -34,6 +34,7 @@ DataCom/
 │   │   └── settings_screen.dart       # Settings (root) — dark toggle, grouped settings, wipe-data confirm
 │   ├── widgets/
 │   │   ├── datacom_app_bar.dart     # Shared header (back/title/subtitle/refresh/inbox) used by every screen
+│   │   ├── datacom_bottom_nav.dart  # Floating pill nav, icon-only — custom-painted from the design's exact SVG paths
 │   │   ├── datacom_card.dart        # Shared rounded/outlined card surface
 │   │   ├── datacom_sheet.dart       # Shared bottom-sheet action menu (design's "sheet" pattern)
 │   │   ├── datacom_toast.dart       # Shared transient confirmation (design's "toast" pattern)
